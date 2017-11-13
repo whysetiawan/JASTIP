@@ -6,10 +6,12 @@ import {
   TouchableOpacity,
   AsyncStorage,
   Button,
-  TextInput
+  TextInput,
+  ActivityIndicator
 } from 'react-native';
 import { connect } from 'react-redux';
-import { signInUser } from '../actions';
+import { Divider } from 'react-native-elements';
+import { signInFacebook } from '../actions';
 import styles from '../components/style';
 import { DefaultButton, TextButton } from '../components/elements/Button';
 
@@ -20,10 +22,7 @@ class Signin extends Component {
   }
 
   onLogin(){
-    this.props.onLogin({
-      email: this.state.email,
-      password: this.state.password,
-    });
+    this.props.signInFacebook();
   }
 
   render(){
@@ -33,7 +32,7 @@ class Signin extends Component {
       <View style={[styles.container, {backgroundColor:'#1E4072'}]}>
         <View style={styles.centerContainer}>
           <View style={styles.startContainer}>
-            <Text style={[styles.indexTitle, { bottom:40, left:20}]}> Register </Text>
+            <Text style={[styles.indexTitle, { bottom:40, left:20}]}> Sign In </Text>
           </View>
 
           <TextInput
@@ -53,18 +52,35 @@ class Signin extends Component {
             secureTextEntry
           />
 
-          <DefaultButton 
-            style={[styles.defaultButton, {margin:10}]}
-            onPress={this.onLogin.bind(this)}
-            styleText={styles.textDefaultButton}
-            text="Sign In"
-          />
+          {
+            this.props.auth.loading?
+            <ActivityIndicator size="large" />
+            :
+            <DefaultButton 
+              style={[styles.defaultButton, {margin:10}]}
+              onPress={this.onLogin.bind(this)}
+              styleText={styles.textDefaultButton}
+              text="Sign in"
+            />
+          }
+          
+          <Text style={[styles.normalButtonText,{ fontSize:12, marginTop:20, marginBottom:15, color:'red'}]}> {this.props.auth.error} </Text>
 
           <TextButton 
             styleText={styles.normalButtonText}
             onPress={() => this.props.navigation.navigate('Forgot')}
             text="Forgot Password?"
           />
+
+          <Divider style={{backgroundColor:'#FFFFFF', width:'100%', marginTop:20}}/>
+
+          <DefaultButton 
+              style={[styles.defaultButton, {margin:25}]}
+              onPress={this.onLogin.bind(this)}
+              styleText={styles.textDefaultButton}
+              text="Sign in with Facebook"
+            />
+
         </View>       
     </View>
     )
@@ -79,7 +95,7 @@ mapStateToProps = (state) => {
 
 mapDispatchToProps = (dispatch) => {
   return {
-    onLogin: (email, password) => dispatch(signInUser(email, password))
+    signInFacebook: () => dispatch(signInFacebook())
   }
 }
 

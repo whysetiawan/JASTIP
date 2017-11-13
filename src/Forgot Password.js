@@ -31,14 +31,15 @@ class Forgot extends Component {
       <View style={[styles.container, {backgroundColor:'#1E4072'}]}>
         <View style={styles.centerContainer}>
           <View style={styles.startContainer}>
-            <Text style={[styles.indexTitle, { bottom:40, left:20}]}> Register </Text>
+            <Text style={[styles.indexTitle, { bottom:40, left:20}]}> Forgot Password </Text>
           </View>
 
           <TextInput
             placeholder="Email"
             style={[styles.defaultForm, {margin:10}]}
             onChangeText={(email) => this.setState({email})}
-            underlineColorAndroid='#222'
+            underlineColorAndroid='#FFFFFF'
+            placeholderTextColor='#FFFFFF'
           />
 
           <DefaultButton 

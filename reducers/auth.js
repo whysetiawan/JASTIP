@@ -11,7 +11,8 @@ const initialState = {
   loggedIn: false,
   loading:false,
   user: {},
-  error: ''
+  error: true,
+  errormsg: ''
 };
 
 export default authReducer = (state = initialState, action) => {
@@ -31,6 +32,7 @@ export default authReducer = (state = initialState, action) => {
     case SIGN_IN_FAILURE:
     return {
       ...state,
+      loading: false,
       error: action.payload
     }
     case SIGN_UP_REQUEST:
@@ -46,6 +48,7 @@ export default authReducer = (state = initialState, action) => {
     case SIGN_UP_FAILURE:
     return {
       ...state,
+      loading:false,
       error: action.payload
     }
     default: 

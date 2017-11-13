@@ -118,7 +118,9 @@ mapStateToProps = (state) => {
 
 mapDispatchToProps = (dispatch) => {
   return {
-    onRegister: (name, email, password, gender, birthdate, address) => dispatch(signUpUser(email, password))
+    onRegister: (name, email, password, gender, birthdate, address) => {
+      dispatch(signUpUser(name, email, password, gender, birthdate, address)
+    )}
   }
 }
 

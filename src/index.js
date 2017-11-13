@@ -18,7 +18,7 @@ export default class Index extends Component {
 			<View style={styles.centerContainer} >
 				<View style={styles.startContainer}>
 					<Text style={[styles.indexTitle, {bottom:80, left:35 }]}> Welcome to JASTIP </Text>
-				</View>					
+				</View>				
 						<DefaultButton 
 							style={styles.defaultButton}
 							onPress={() => navigate('Signin')}
