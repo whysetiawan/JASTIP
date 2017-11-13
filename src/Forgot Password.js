@@ -13,16 +13,14 @@ import { signInUser } from '../actions';
 import styles from '../components/style';
 import { DefaultButton, TextButton } from '../components/elements/Button';
 
-class Signin extends Component {
+class Forgot extends Component {
   state = {
     email: '',
-    password: ''
   }
 
   onLogin(){
     this.props.onLogin({
       email: this.state.email,
-      password: this.state.password,
     });
   }
 
@@ -40,30 +38,14 @@ class Signin extends Component {
             placeholder="Email"
             style={[styles.defaultForm, {margin:10}]}
             onChangeText={(email) => this.setState({email})}
-            underlineColorAndroid='#FFFFFF'
-            placeholderTextColor='#FFFFFF'
-          />
-
-          <TextInput
-            placeholder="Password"
-            style={[styles.defaultForm, {margin:10}]}
-            underlineColorAndroid='#FFFFFF'
-            placeholderTextColor='#FFFFFF'
-            onChangeText={(password) => this.setState({password})}
-            secureTextEntry
+            underlineColorAndroid='#222'
           />
 
           <DefaultButton 
             style={[styles.defaultButton, {margin:10}]}
             onPress={this.onLogin.bind(this)}
             styleText={styles.textDefaultButton}
-            text="Sign In"
-          />
-
-          <TextButton 
-            styleText={styles.normalButtonText}
-            onPress={() => this.props.navigation.navigate('Forgot')}
-            text="Forgot Password?"
+            text="Apply"
           />
         </View>       
     </View>
@@ -73,14 +55,14 @@ class Signin extends Component {
 
 mapStateToProps = (state) => {
   return {
-    auth: state.auth
+    loggedIn: state.auth
   };
 }
 
 mapDispatchToProps = (dispatch) => {
   return {
-    onLogin: (email, password) => dispatch(signInUser(email, password))
+    onLogin: (email) => dispatch(signInUser(email, password))
   }
 }
 
-export default connect(mapStateToProps, mapDispatchToProps)(Signin);
+export default connect(mapStateToProps, mapDispatchToProps)(Forgot);

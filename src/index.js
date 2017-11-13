@@ -14,7 +14,7 @@ export default class Index extends Component {
 		console.ignoredYellowBox = ['Setting a timer'];
 		const {navigate} = this.props.navigation;
 		return(
-		<View style={styles.container}>
+		<View style={[styles.container, {backgroundColor:'#1E4072'}]}>
 			<View style={styles.centerContainer} >
 				<View style={styles.startContainer}>
 					<Text style={[styles.indexTitle, {bottom:80, left:35 }]}> Welcome to JASTIP </Text>

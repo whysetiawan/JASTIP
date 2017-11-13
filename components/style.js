@@ -3,7 +3,6 @@ import {StyleSheet} from 'react-native';
 const styles = StyleSheet.create({
 	container: {
 		flex: 1,
-		backgroundColor: '#F5FCFF',
 	},
 	centerContainer: {
 		flex: 1,
@@ -15,32 +14,32 @@ const styles = StyleSheet.create({
 	},
 	indexTitle: {
 		fontFamily: 'VINCHAND',
-		fontSize: 28,
-		color: '#222',
-		fontWeight: 'bold'
+		fontSize: 24,
+		color: '#FFFFFF',
+		fontWeight: '500'
 	},
 	defaultButton: {
 		width: 340,
-		height: 60,
+		height: 50,
 		backgroundColor: 'transparent',
 		alignItems: 'center',
 		justifyContent: 'center',
-		borderWidth: 1.7,
-		borderRadius: 30,
-		borderColor: '#222',
+		borderWidth: 1,
+		borderColor: '#FFFFFF',
 		margin: 10
 	},
 	textDefaultButton: {
-		fontSize: 20,
-		fontWeight: 'bold',
-		color: '#222',
+		fontSize: 16,
+		color: '#FFFFFF',
 	},
 	defaultForm: {
-		color: '#222',
+		color: '#FFFFFF',
 		width: 360,
-		height: 50,
-		fontSize: 16,
+		height: 40,
 	},
+	normalButtonText: {
+		color: '#E2E2E2'
+	}
 })
 
 export default styles;
