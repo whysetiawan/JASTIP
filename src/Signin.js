@@ -11,7 +11,7 @@ import {
 } from 'react-native';
 import { connect } from 'react-redux';
 import { Divider } from 'react-native-elements';
-import { signInFacebook } from '../actions';
+import { signInFacebook, signInUser } from '../actions';
 import styles from '../components/style';
 import { DefaultButton, TextButton } from '../components/elements/Button';
 
@@ -22,6 +22,14 @@ class Signin extends Component {
   }
 
   onLogin(){
+    const { email, password } = this.state
+    this.props.signInUser({
+      email: email,
+      password: password
+    });
+  }
+
+  onLoginFacebook(){
     this.props.signInFacebook();
   }
 
@@ -73,13 +81,18 @@ class Signin extends Component {
           />
 
           <Divider style={{backgroundColor:'#FFFFFF', width:'100%', marginTop:20}}/>
-
+          
+          {
+            this.props.auth.loading?
+            <ActivityIndicator size="large" />
+            :
           <DefaultButton 
               style={[styles.defaultButton, {margin:25}]}
-              onPress={this.onLogin.bind(this)}
+              onPress={this.onLoginFacebook.bind(this)}
               styleText={styles.textDefaultButton}
               text="Sign in with Facebook"
             />
+          }
 
         </View>       
     </View>
@@ -95,7 +108,8 @@ mapStateToProps = (state) => {
 
 mapDispatchToProps = (dispatch) => {
   return {
-    signInFacebook: () => dispatch(signInFacebook())
+    signInFacebook: () => dispatch(signInFacebook()),
+    signInUser: (email, password) => dispatch(signInUser(email, password))
   }
 }
 

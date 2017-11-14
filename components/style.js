@@ -10,7 +10,7 @@ const styles = StyleSheet.create({
 		justifyContent:'center'
 	},
 	startContainer: {
-		alignSelf: 'flex-start'
+		alignSelf: 'flex-start',
 	},
 	indexTitle: {
 		fontFamily: 'VINCHAND',
@@ -39,6 +39,44 @@ const styles = StyleSheet.create({
 	},
 	normalButtonText: {
 		color: '#E2E2E2'
+	},
+	defaultCover: {
+		backgroundColor: '#AAAAAA',
+		width: '100%',
+		height: 150,
+		marginBottom:15
+	},
+	bigTextSize : {
+		fontSize: 20,
+		color: '#222',
+	},
+	rowSpaceBetween: {
+		flexDirection:'row',
+		height: 170,
+	},
+	fixProfileScreen: {
+		flex: 1,
+		borderWidth:2,
+	},
+	mediumTextSize: {
+		fontSize: 16,
+		color: '#222'
+	},
+	normalTextSize: {
+		color: '#222'
+	},
+	profileStyle: {
+		width:'50%',
+		alignItems: 'center',
+	},
+	followingStyle: {
+		width: '50%',
+		top: 30,
+		alignItems:'center',
+	},
+	bigTextSize2: {
+		fontSize: 18,
+		color:'#222'
 	}
 })
 

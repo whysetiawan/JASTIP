@@ -3626,6 +3626,10 @@ react-native-fbsdk@^0.6.3:
     pump "^1.0.2"
     xcode "^0.9.3"
 
+react-native-instagram-login@^1.0.3:
+  version "1.0.3"
+  resolved "https://registry.yarnpkg.com/react-native-instagram-login/-/react-native-instagram-login-1.0.3.tgz#a1c990be537f5e1281edc1539e381a2cc8bac3b1"
+
 react-native-tab-view@^0.0.70:
   version "0.0.70"
   resolved "https://registry.yarnpkg.com/react-native-tab-view/-/react-native-tab-view-0.0.70.tgz#1dd2ded32acd0cb6bfef38d26e53675db733b37b"

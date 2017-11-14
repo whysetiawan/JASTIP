@@ -2,9 +2,14 @@ import {
   SIGN_IN_REQUEST,
   SIGN_IN_SUCCESS,
   SIGN_IN_FAILURE,
+
   SIGN_UP_REQUEST,
   SIGN_UP_SUCCESS,
-  SIGN_UP_FAILURE
+  SIGN_UP_FAILURE,
+
+  INSTAGRAM_REQUEST,
+  INSTAGRAM_SUCCESS,
+  INSTAGRAM_FAILURE,
 } from '../constants';
 
 const initialState = {
@@ -12,7 +17,8 @@ const initialState = {
   loading:false,
   user: {},
   error: true,
-  errormsg: ''
+  errormsg: '',
+  igToken: ''
 };
 
 export default authReducer = (state = initialState, action) => {
@@ -51,6 +57,24 @@ export default authReducer = (state = initialState, action) => {
       loading:false,
       error: action.payload
     }
+    // case INSTAGRAM_REQUEST:
+    // return {
+    //   ...state,
+    //   loading: true
+    // }
+    // case INSTAGRAM_SUCCESS:
+    // return {
+    //   ...state,
+    //   loading:false,
+    //   token: action.payload
+    // }
+    // case INSTAGRAM_FAILURE:
+    // return {
+    //   ...state,
+    //   loading: false,
+    //   error: true,
+    //   errormsg: 'Login Failure'
+    // }
     default: 
     return state;
   }
