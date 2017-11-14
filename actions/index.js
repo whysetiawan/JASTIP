@@ -1,4 +1,4 @@
-import firebase from '../components/Firebase';
+import firebase from 'react-native-firebase';
 import { AccessToken, LoginManager } from 'react-native-fbsdk';
 import InstagramLogin from 'react-native-instagram-login';
 import { NavigationActions } from 'react-navigation';
@@ -25,7 +25,8 @@ return (dispatch) => {
   dispatch({ type: SIGN_IN_REQUEST });
   firebase.auth().signInWithEmailAndPassword(email, password)
   .then((user) => {
-    dispatch({ type: SIGN_IN_SUCCESS, payload: user})
+    console.log(user)
+    dispatch({ type: SIGN_IN_SUCCESS, payload: user._user})
     dispatch(NavigationActions.reset({
       index: 0,
       actions: [
@@ -51,10 +52,12 @@ export const signInFacebook = (user) => {
         console.log('you cancelled login')
       }
       else {
-        AccessToken.getCurrentAccessToken().then((data) => {
-          var provider = firebase.auth.FacebookAuthProvider();
-          firebase.auth().signInWithPopup(provider).then((res) => {
-            console.log(res)
+          AccessToken.getCurrentAccessToken().then( async (data) => {
+          const credential = await firebase.auth.FacebookAuthProvider.credential(data.accessToken);
+          const user = await firebase.auth().signInWithCredential(credential).then((user) => {
+            console.log(user._user)
+            dispatch(NavigationActions.navigate({routeName:'Tabs'}))
+            dispatch({ type: SIGN_IN_SUCCESS, payload:user._user})
           })
         })
     .catch((e) => {

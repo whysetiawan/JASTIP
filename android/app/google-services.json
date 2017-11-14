@@ -1,0 +1,42 @@
+{
+  "project_info": {
+    "project_number": "259425954719",
+    "firebase_url": "https://new-app-a5e9b.firebaseio.com",
+    "project_id": "new-app-a5e9b",
+    "storage_bucket": "new-app-a5e9b.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:259425954719:android:9eb02a704b9804a0",
+        "android_client_info": {
+          "package_name": "com.jastip"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "259425954719-jkf16drp0sbi8ggl1qugensokn73ik07.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyC-2UQRlWBVvIWgeamSnDbkjFTOXSx1j_w"
+        }
+      ],
+      "services": {
+        "analytics_service": {
+          "status": 1
+        },
+        "appinvite_service": {
+          "status": 1,
+          "other_platform_oauth_client": []
+        },
+        "ads_service": {
+          "status": 2
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}

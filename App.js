@@ -4,6 +4,8 @@ import { connect } from 'react-redux';
 import { addNavigationHelpers } from 'react-navigation';
 import firebase from './components/Firebase';
 
+
+console.log(this.props)
 const App = ({ dispatch, nav }) => (
       <AppNavigator navigation={addNavigationHelpers({
         dispatch,
