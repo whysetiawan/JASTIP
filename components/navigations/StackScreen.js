@@ -11,6 +11,9 @@ export default StackScreen = {
   Signin: { screen: Signin },
   Register: { screen: Register },
   Forgot : { screen: Forgot },
-  Tabs: { screen: Tabs },
+  Tabs: { screen: Tabs,
+    navigationOptions: {
+      header: false
+  } },
   EditProfile: { screen: EditProfile },
 }

@@ -172,12 +172,17 @@ class EditProfile extends Component {
                   underlineColorAndroid="#666666"
                 />
 
+                {
+                  this.props.auth.loading ?
+                <ActivityIndicator />
+                :
                 <DefaultButton 
                   style={[styles.defaultButton, {margin:10}]}
                   onPress={this.onSave.bind(this)}
                   styleText={styles.normalButtonText}
                   text="Save"
                 />
+                }
 
           </View>  
         </ScrollView>     

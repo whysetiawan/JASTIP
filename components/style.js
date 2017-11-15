@@ -109,6 +109,13 @@ const styles = StyleSheet.create({
 	},
 	normalButtonText: {
 		color:'#222'
+	},
+	largeProfileImage: {
+		width: 125,
+		height: 125,
+		borderRadius: 62.5,
+		alignSelf:'center',
+		left:40,
 	}
 })
 

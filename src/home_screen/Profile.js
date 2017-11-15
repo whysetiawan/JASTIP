@@ -7,15 +7,48 @@ import {
 	Image,
 	TouchableWithoutFeedback,
 	ScrollView,
-	TouchableNativeFeedback
+	TouchableNativeFeedback,
 } from 'react-native';
 import styles from '../../components/style.js';
 import { fetchingUser } from '../../actions/';
+import ActionSheet from 'react-native-actionsheet';
+import ImagePicker from 'react-native-image-crop-picker';
 import Icon from 'react-native-vector-icons/Ionicons';
 import { connect } from 'react-redux';
 import { Avatar, Divider } from 'react-native-elements';
 
+const CANCEL_INDEX = 0
+const options = ['Cancel','Take a selfie', 'Select from gallery']
+
 class Profile extends Component {
+	constructor(props) {
+    super(props)
+    this.state = {
+      selected: ''
+    }
+    this.showActionSheet = this.showActionSheet.bind(this)
+  }
+
+  showActionSheet() {
+    this.ActionSheet.show()
+  }
+
+  action(i) {
+    this.setState({
+      selected: i
+		})
+		const action = this.state.selected;
+		if (action === 1){
+			ImagePicker.openCamera({}).then((image){
+				alert(image)
+			})
+		}
+		else if (action === 2){
+			ImagePicker.openPicker({}).then((image) => {
+				alert(image)
+			})
+		}
+  }
 
 	componentDidMount(){
 		const id = this.props.auth.user.uid;
@@ -54,18 +87,23 @@ class Profile extends Component {
 											</View>
 										</View>
 								</View>
-										<Avatar
-											xlarge
-											rounded
-											source={{uri:'https://cdn.pixabay.com/photo/2016/08/08/09/17/avatar-1577909_960_720.png'}}
-											containerStyle={{left: 40}}
-										/>
+										<TouchableWithoutFeedback
+										 onPress={this.showActionSheet.bind(this)}
+										>
+											<Image
+												style={styles.largeProfileImage}
+												source={{uri: 'https://cdn.pixabay.com/photo/2016/08/08/09/17/avatar-1577909_960_720.png'}}
+											>
+											</Image>
+										</TouchableWithoutFeedback>
 						</View>
-						<TouchableNativeFeedback
-							onPress={() => this.props.navigation.navigate('EditProfile', {data})}
-						>
-							<Text style={[styles.normalTextSize,{ bottom:50, left: 50}]}> Edit your Profile </Text>
-						</TouchableNativeFeedback>
+						<View style={{bottom:50, left: 50, width:110}} >
+							<TouchableNativeFeedback
+								onPress={() => this.props.navigation.navigate('EditProfile', {data})}
+							>
+								<Text style={[styles.normalTextSize]}> Edit your Profile </Text>
+							</TouchableNativeFeedback>
+						</View>
 							<View style={styles.container}>
 								<Divider 
 									style={{ backgroundColor: '#616161', height:0.7}}
@@ -97,6 +135,12 @@ class Profile extends Component {
 								</View>
 							</View>
 			</ScrollView>
+				<ActionSheet
+          ref={o => this.ActionSheet = o}
+          options={options}
+          cancelButtonIndex={CANCEL_INDEX}
+          onPress={this.action.bind(this)}
+        />
 		</View>
 		)
 	}
