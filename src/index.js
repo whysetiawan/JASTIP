@@ -20,16 +20,16 @@ export default class Index extends Component {
 					<Text style={[styles.indexTitle, {bottom:80, left:35 }]}> Welcome to JASTIP </Text>
 				</View>				
 						<DefaultButton 
-							style={styles.defaultButton}
+							style={styles.customButton}
 							onPress={() => navigate('Signin')}
-							styleText={styles.textDefaultButton}
+							styleText={styles.customTextButton}
 							text="Sign In"
 						/>
 
 						<DefaultButton 
-							style={styles.defaultButton}
+							style={styles.customButton}
 							onPress={() => navigate('Register')}
-							styleText={styles.textDefaultButton}
+							styleText={styles.customTextButton}
 							text="Create an account"
 						/>
 			</View>

@@ -49,7 +49,8 @@ export default authReducer = (state = initialState, action) => {
     case SIGN_UP_SUCCESS:
     return {
       ...state,
-      user: action.payload
+      user: action.payload,
+      loading: false
     }
     case SIGN_UP_FAILURE:
     return {

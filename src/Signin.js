@@ -14,11 +14,13 @@ import { Divider } from 'react-native-elements';
 import { signInFacebook, signInUser } from '../actions';
 import styles from '../components/style';
 import { DefaultButton, TextButton } from '../components/elements/Button';
+import { Anim } from '../components/elements/Animation';
 
 class Signin extends Component {
   state = {
     email: '',
-    password: ''
+    password: '',
+    loading: this.props.auth.loading
   }
 
   onLogin(){
@@ -45,7 +47,7 @@ class Signin extends Component {
 
           <TextInput
             placeholder="Email"
-            style={[styles.defaultForm, {margin:10}]}
+            style={[styles.customForm, {margin:10}]}
             onChangeText={(email) => this.setState({email})}
             underlineColorAndroid='#FFFFFF'
             placeholderTextColor='#FFFFFF'
@@ -53,7 +55,7 @@ class Signin extends Component {
 
           <TextInput
             placeholder="Password"
-            style={[styles.defaultForm, {margin:10}]}
+            style={[styles.customForm, {margin:10}]}
             underlineColorAndroid='#FFFFFF'
             placeholderTextColor='#FFFFFF'
             onChangeText={(password) => this.setState({password})}
@@ -65,17 +67,17 @@ class Signin extends Component {
             <ActivityIndicator size="large" />
             :
             <DefaultButton 
-              style={[styles.defaultButton, {margin:10}]}
+              style={[styles.customButton, {margin:10}]}
               onPress={this.onLogin.bind(this)}
-              styleText={styles.textDefaultButton}
+              styleText={styles.customTextButton}
               text="Sign in"
             />
           }
           
-          <Text style={[styles.normalButtonText,{ fontSize:12, marginTop:20, marginBottom:15, color:'red'}]}> {this.props.auth.error} </Text>
+          <Text style={{ fontSize:12, marginTop:20, marginBottom:15, color:'red'}}> {this.props.auth.error} </Text>
 
           <TextButton 
-            styleText={styles.normalButtonText}
+            styleText={styles.normalCustomButtonText}
             onPress={() => this.props.navigation.navigate('Forgot')}
             text="Forgot Password?"
           />
@@ -83,16 +85,31 @@ class Signin extends Component {
           <Divider style={{backgroundColor:'#FFFFFF', width:'100%', marginTop:20}}/>
           
           {
-            this.props.auth.loading?
+            this.state.loading?
             <ActivityIndicator size="large" />
             :
           <DefaultButton 
-              style={[styles.defaultButton, {margin:25}]}
+              style={[styles.customButton, {margin:25}]}
               onPress={this.onLoginFacebook.bind(this)}
-              styleText={styles.textDefaultButton}
+              styleText={styles.customTextButton}
               text="Sign in with Facebook"
             />
           }
+
+          {/* <Anim
+            style={styles.modal}
+            ref="modal"
+            backdropPressToClose={false}
+            backdropOpacity={0.7}
+            swipeToClose={false}
+            onOpened={this.onLogin.bind(this)}
+            animRef={ animation => {
+              this.animation = animation
+            }}
+            animStyle={{ width: 200, height:100 }}
+            loop={true}
+            source={require('../components/animations/loading_animation.json')}
+          /> */}
 
         </View>       
     </View>

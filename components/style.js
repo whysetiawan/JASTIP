@@ -3,6 +3,7 @@ import {StyleSheet} from 'react-native';
 const styles = StyleSheet.create({
 	container: {
 		flex: 1,
+		backgroundColor: '#fefefe'
 	},
 	centerContainer: {
 		flex: 1,
@@ -18,7 +19,7 @@ const styles = StyleSheet.create({
 		color: '#FFFFFF',
 		fontWeight: '500'
 	},
-	defaultButton: {
+	customButton: {
 		width: 340,
 		height: 50,
 		backgroundColor: 'transparent',
@@ -28,16 +29,16 @@ const styles = StyleSheet.create({
 		borderColor: '#FFFFFF',
 		margin: 10
 	},
-	textDefaultButton: {
+	customTextButton: {
 		fontSize: 16,
 		color: '#FFFFFF',
 	},
-	defaultForm: {
+	customForm: {
 		color: '#FFFFFF',
 		width: 360,
 		height: 40,
 	},
-	normalButtonText: {
+	normalCustomButtonText: {
 		color: '#E2E2E2'
 	},
 	defaultCover: {
@@ -50,13 +51,9 @@ const styles = StyleSheet.create({
 		fontSize: 20,
 		color: '#222',
 	},
-	rowSpaceBetween: {
+	rowContainer: {
 		flexDirection:'row',
 		height: 170,
-	},
-	fixProfileScreen: {
-		flex: 1,
-		borderWidth:2,
 	},
 	mediumTextSize: {
 		fontSize: 16,
@@ -76,6 +73,41 @@ const styles = StyleSheet.create({
 	},
 	bigTextSize2: {
 		fontSize: 18,
+		color:'#222'
+	},
+	normalTextSize2: {
+		fontSize: 16,
+		color:'#222'
+	},
+	rowSpaceBetweenContainer: {
+		flexDirection:'row',
+		justifyContent:'space-between'
+	},
+	smallTextSize: {
+		fontSize: 14,
+		color: '#222'
+	},
+	homeTitle: {
+		fontSize: 24,
+		fontWeight: '500',
+		color:'#222'
+	},
+	widthForm: {
+		color: '#222',
+		width: 360,
+		height: 40,
+	},
+	defaultButton: {
+			width: 340,
+			height: 50,
+			backgroundColor: 'transparent',
+			alignItems: 'center',
+			justifyContent: 'center',
+			borderWidth: 1,
+			borderColor: '#222',
+			margin: 10
+	},
+	normalButtonText: {
 		color:'#222'
 	}
 })

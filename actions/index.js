@@ -17,7 +17,11 @@ import {
 
   FETCH_USER_REQUEST,
   FETCH_USER_SUCCESS,
-  FETCH_USER_FAILURE
+  FETCH_USER_FAILURE,
+  
+  UPDATE_USER_REQUEST,
+  UPDATE_USER_SUCCESS,
+  UPDATE_USER_FAILURE
 } from '../constants';
 
 export const signInUser = ({ email, password }) => {
@@ -72,9 +76,7 @@ export const signUpUser = ({
   email,
   password,
   name,
-  gender,
-  birthdate,
-  address
+  number
 }) => {
   return(dispatch) => {
     dispatch({ type: SIGN_UP_REQUEST });
@@ -86,9 +88,7 @@ export const signUpUser = ({
         name: name,
         email: email,
         password: password,
-        gender: gender,
-        birthdate: birthdate,
-        address: address
+        number: number
       })
       dispatch({ type: SIGN_UP_SUCCESS, payload: user })
     })
@@ -125,5 +125,37 @@ export const fetchingUser = (uid) => {
     // .catch((e) => {
     //   dispatch({ type: FETCH_USER_FAILURE, payload: e.message || e })
     // })
+  }
+}
+
+export const editProfile = ({
+  uid,
+  name,
+  email, 
+  password, 
+  number, 
+  birthdate, 
+  gender, 
+  value, 
+  address
+}) => {
+  return(dispatch) => {
+    dispatch({ type: UPDATE_USER_REQUEST })
+    firebase.database().ref(`user/${uid}`).update({
+      name: name,
+      email: email,
+      password: password,
+      number: number,
+      birthdate: birthdate,
+      gender: gender,
+      value: value,
+      address: address
+    })
+    .then(() => {
+    dispatch({ type: UPDATE_USER_SUCCESS })
+    })
+    .catch((e) => {
+    dispatch({ type: UPDATE_USER_FAILURE, payload: e })
+    })
   }
 }

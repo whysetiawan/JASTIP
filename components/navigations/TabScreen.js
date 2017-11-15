@@ -28,7 +28,7 @@ export default Tabs = TabNavigator({
 },
 	Message: { screen: Message,
 	navigationOptions: {
-		tabBarLabel: 'EXPLORE',
+		tabBarLabel: 'MESSAGE',
 		tabBarIcon: ({ tintColor}) =>  <Icon name="ios-chatbubbles-outline" size={35} />
 	},
 },
