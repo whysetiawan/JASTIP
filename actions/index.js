@@ -2,6 +2,8 @@ import firebase from 'react-native-firebase';
 import { AccessToken, LoginManager } from 'react-native-fbsdk';
 import InstagramLogin from 'react-native-instagram-login';
 import { NavigationActions } from 'react-navigation';
+import fb from '../components/Firebase';
+import RNFetchBlob from 'react-native-fetch-blob';
 import {
   SIGN_IN_FAILURE,
   SIGN_IN_REQUEST,
@@ -21,7 +23,15 @@ import {
   
   UPDATE_USER_REQUEST,
   UPDATE_USER_SUCCESS,
-  UPDATE_USER_FAILURE
+  UPDATE_USER_FAILURE,
+
+  UPLOAD_PROFILE_PHOTO,
+  UPLOAD_PROFILE_PHOTO_SUCCESS,
+  UPLOAD_PROFILE_PHOTO_FAILURE,
+
+  UPLOAD_COVER_PHOTO,
+  UPLOAD_COVER_PHOTO_SUCCESS,
+  UPLOAD_COVER_PHOTO_FAILURE
 } from '../constants';
 
 export const signInUser = ({ email, password }) => {
@@ -159,3 +169,81 @@ export const editProfile = ({
     })
   }
 }
+
+export const uploadProfilePhoto = ({id, image}) => {
+
+  const Blob = RNFetchBlob.polyfill.Blob;
+  const fs = RNFetchBlob.fs;
+  window.XMLHttpRequest = RNFetchBlob.polyfill.XMLHttpRequest;
+  const sessionId = new Date().getTime()
+  window.Blob = Blob;
+  const imageRef = fb.storage().ref('Profile').child(`${id}/Image - ${sessionId}`)
+  let mime = 'image/jpg';
+  const path = image.path;
+  let uploadBlob = null
+
+  return (dispatch) => {
+    dispatch({ type: UPLOAD_PROFILE_PHOTO })
+    fs.readFile(path, 'base64')
+    .then((data) => {
+      return Blob.build(data, { type: `${mime};BASE64` })
+    })
+    .then((blob) => {
+      uploadBlob = blob
+      return imageRef.put(blob, { contentType:mime })
+    })
+    .then(() => {
+      uploadBlob.close();
+      return imageRef.getDownloadURL()
+    })
+    .then( async (url) => {
+      firebase.database().ref(`user/${id}`).update({
+        profile_image: url
+      }).then(() => {
+        dispatch({ type: UPLOAD_PROFILE_PHOTO_SUCCESS, payload: url })
+      })
+    })
+    .catch((e) => {
+      dispatch({ type: UPLOAD_PROFILE_PHOTO_FAILURE, payload: e })
+    })
+  }
+}
+
+export const uploadCoverPhoto = ({id, image}) => {
+  
+    const Blob = RNFetchBlob.polyfill.Blob;
+    const fs = RNFetchBlob.fs;
+    window.XMLHttpRequest = RNFetchBlob.polyfill.XMLHttpRequest;
+    const sessionId = new Date().getTime()
+    window.Blob = Blob;
+    const imageRef = fb.storage().ref('Cover').child(`${id}/Image - ${sessionId}`)
+    let mime = 'image/jpg';
+    const path = image.path;
+    let uploadBlob = null
+  
+    return (dispatch) => {
+      dispatch({ type: UPLOAD_COVER_PHOTO })
+      fs.readFile(path, 'base64')
+      .then((data) => {
+        return Blob.build(data, { type: `${mime};BASE64` })
+      })
+      .then((blob) => {
+        uploadBlob = blob
+        return imageRef.put(blob, { contentType:mime })
+      })
+      .then(() => {
+        uploadBlob.close();
+        return imageRef.getDownloadURL()
+      })
+      .then( async (url) => {
+       await firebase.database().ref(`user/${id}`).update({
+          cover_image: url
+        }).then(() => {
+          dispatch({ type: UPLOAD_COVER_PHOTO_SUCCESS, payload: url })
+        })
+      })
+      .catch((e) => {
+        dispatch({ type: UPLOAD_COVER_PHOTO_FAILURE, payload: e })
+      })
+    }
+  }

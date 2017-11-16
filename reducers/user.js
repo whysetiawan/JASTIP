@@ -5,7 +5,15 @@ import {
 
   UPDATE_USER_REQUEST,
   UPDATE_USER_SUCCESS,
-  UPDATE_USER_FAILURE
+  UPDATE_USER_FAILURE,
+  
+  UPLOAD_PROFILE_PHOTO,
+  UPLOAD_PROFILE_PHOTO_SUCCESS,
+  UPLOAD_PROFILE_PHOTO_FAILURE,
+
+  UPLOAD_COVER_PHOTO,
+  UPLOAD_COVER_PHOTO_SUCCESS,
+  UPLOAD_COVER_PHOTO_FAILURE
 } from '../constants';
 
 const initState = {
@@ -47,6 +55,46 @@ export default userReducer = (state= initState, action) => {
     return {
       ...state,
       loading:false,
+      error: action.payload
+    }
+    case UPLOAD_PROFILE_PHOTO:
+    return {
+      ...state,
+      loading: true
+    }
+    case UPLOAD_PROFILE_PHOTO_SUCCESS:
+    return {
+      ...state,
+      loading: false,
+      user: {
+        ...state.user,
+        profile_image:action.payload
+      }
+    }
+    case UPLOAD_PROFILE_PHOTO_FAILURE:
+    return {
+      ...state,
+      loading:false,
+      error: action.payload
+    }
+    case UPLOAD_COVER_PHOTO:
+    return {
+      ...state,
+      loading:true,
+    }
+    case UPLOAD_COVER_PHOTO_SUCCESS:
+    return {
+      ...state,
+      loading: false,
+      user: {
+        ...state.user,
+        profile_cover: action.payload
+      }
+    }
+    case UPLOAD_COVER_PHOTO_FAILURE:
+    return {
+      ...state,
+      loading: false,
       error: action.payload
     }
     default:

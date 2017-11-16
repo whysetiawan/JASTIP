@@ -37,6 +37,7 @@ class EditProfile extends Component {
   }
   componentWillMount(){
     const { params } = this.props.navigation.state;
+    console.log(param)
     const { 
       data: {
         user : data 
@@ -72,6 +73,7 @@ class EditProfile extends Component {
 
   render(){
     const { name, email, password, number, birthdate, address, value, gender} = this.state
+    console.log(gender)
     console.ignoredYellowBox = ['Remote debugger'];
     console.ignoredYellowBox = ['Setting a timer'];
     return(
@@ -131,7 +133,7 @@ class EditProfile extends Component {
                     <View style={{ borderWidth:0.7}}>
                       <Picker
                         style={{width:120, height: 30, borderWidth:1,color:'#222'}}
-                        selectedValue={this.state.gender}
+                        selectedValue={gender}
                         onValueChange={(itemValue) => this.setState({ gender: itemValue})}
                         mode='dropdown'
                       >

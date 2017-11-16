@@ -45,7 +45,9 @@ const styles = StyleSheet.create({
 		backgroundColor: '#AAAAAA',
 		width: '100%',
 		height: 150,
-		marginBottom:15
+		marginBottom:15,
+		alignItems: 'center',
+		justifyContent: 'center'
 	},
 	bigTextSize : {
 		fontSize: 20,

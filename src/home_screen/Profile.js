@@ -8,9 +8,10 @@ import {
 	TouchableWithoutFeedback,
 	ScrollView,
 	TouchableNativeFeedback,
+	ActivityIndicator,
 } from 'react-native';
 import styles from '../../components/style.js';
-import { fetchingUser } from '../../actions/';
+import { fetchingUser, uploadProfilePhoto, uploadCoverPhoto } from '../../actions/';
 import ActionSheet from 'react-native-actionsheet';
 import ImagePicker from 'react-native-image-crop-picker';
 import Icon from 'react-native-vector-icons/Ionicons';
@@ -39,16 +40,33 @@ class Profile extends Component {
 		})
 		const action = this.state.selected;
 		if (action === 1){
-			ImagePicker.openCamera({}).then((image){
-				alert(image)
+			ImagePicker.openCamera({}).then((image) => {
+				this.props.uploadPhoto({ id: this.props.auth.user.uid, image: image})
 			})
 		}
 		else if (action === 2){
 			ImagePicker.openPicker({}).then((image) => {
-				alert(image)
+				this.props.uploadPhoto({ id: this.props.auth.user.uid, image: image})
 			})
 		}
-  }
+	}
+	
+	actionCover(i) {
+    this.setState({
+      selected: i
+		})
+		const action = this.state.selected;
+		if (action === 1){
+			ImagePicker.openCamera({}).then((image) => {
+				this.props.uploadCoverPhoto({ id: this.props.auth.user.uid, image: image})
+			})
+		}
+		else if (action === 2){
+			ImagePicker.openPicker({}).then((image) => {
+				this.props.uploadCoverPhoto({ id: this.props.auth.user.uid, image: image})
+			})
+		}
+	}
 
 	componentDidMount(){
 		const id = this.props.auth.user.uid;
@@ -65,11 +83,26 @@ class Profile extends Component {
 		const data = this.props.user
   	console.ignoredYellowBox = ['Remote debugger'];
 		console.ignoredYellowBox = ['Setting a timer'];
+		const avatar = 'https://cdn.pixabay.com/photo/2016/08/08/09/17/avatar-1577909_960_720.png'
 		return(
 		<View style={styles.container}>
 			<ScrollView>
+				<TouchableOpacity
+					onPress={() => this.ActionSheetCover.show()}
+				>
 				<View style={styles.defaultCover}>
+					{
+						user.cover_image == '' ? 
+					(
+							<Text style={styles.customTextButton}> Press to set your cover Photos </Text>
+					):
+						<Image 
+							style={{width:'100%', height:'100%'}}
+							source={{uri: user.cover_image}}
+						/>
+				}
 				</View>
+				</TouchableOpacity>
 
 						<View style={styles.rowContainer}>
 								<View style={styles.profileStyle}>
@@ -87,15 +120,26 @@ class Profile extends Component {
 											</View>
 										</View>
 								</View>
+									{
+										loading ? <ActivityIndicator size = "large"/> 
+									:
 										<TouchableWithoutFeedback
 										 onPress={this.showActionSheet.bind(this)}
 										>
 											<Image
 												style={styles.largeProfileImage}
-												source={{uri: 'https://cdn.pixabay.com/photo/2016/08/08/09/17/avatar-1577909_960_720.png'}}
+												source=
+												{{uri: 
+													user.profile_image ==  undefined ?  avatar
+													:
+													user.profile_image == '' ? avatar
+													:
+													user.profile_image
+												}}
 											>
 											</Image>
 										</TouchableWithoutFeedback>
+									}
 						</View>
 						<View style={{bottom:50, left: 50, width:110}} >
 							<TouchableNativeFeedback
@@ -141,6 +185,12 @@ class Profile extends Component {
           cancelButtonIndex={CANCEL_INDEX}
           onPress={this.action.bind(this)}
         />
+				<ActionSheet
+          ref={o => this.ActionSheetCover = o}
+          options={options}
+          cancelButtonIndex={CANCEL_INDEX}
+          onPress={this.actionCover.bind(this)}
+        />
 		</View>
 		)
 	}
@@ -155,7 +205,9 @@ mapStateToProps = (state) => {
 
 mapDispatchToProps = (dispatch) => {
 	return {
-		getUser: (uid) => dispatch(fetchingUser(uid))
+		getUser: (uid) => dispatch(fetchingUser(uid)),
+		uploadPhoto: (uid, image) => dispatch(uploadProfilePhoto(uid, image)),
+		uploadCoverPhoto: (uid, image) => dispatch(uploadCoverPhoto(uid, image))
 	}
 }
 
