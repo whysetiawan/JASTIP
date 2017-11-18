@@ -9,11 +9,14 @@ import {
   TextInput,
   Picker,
   ActivityIndicator,
-  ScrollView
+  ScrollView,
 } from 'react-native';
 import { connect } from 'react-redux';
+import { Field, reduxForm, change } from'redux-form';
 import { FormLabel } from 'react-native-elements';
+import StatusBarAlert from 'react-native-statusbar-alert';
 import { editProfile } from '../../../actions';
+import { customInput } from '../../../components/elements/Input';
 import styles from '../../../components/style';
 import { DefaultButton, TextButton } from '../../../components/elements/Button';
 
@@ -23,110 +26,107 @@ class EditProfile extends Component {
   })
   constructor(props){
     super(props);
+    console.log(props)
     this.state = {
         id: this.props.auth.user.uid,
-        name: '',
+        name: props.auth.user.uid,
         email: '',
         password: '',
         number: '',
         address: '',
-        value:'',
-        gender: 'Jastip-V',
-        birthdate:''
+        value: this.props.initialValues.value || '10.000',
+        gender: this.props.initialValues.gender,
+        birthdate:'',
+        error: false
         }
-  }
-  componentWillMount(){
-    const { params } = this.props.navigation.state;
-    console.log(param)
-    const { 
-      data: {
-        user : data 
-      }
-    } = params
-    console.log(data)
-    this.setState({
-      name: data.name,
-      email: data.email,
-      password: data.password,
-      number: data.number,
-      address: data.address || '',
-      value: data.jastip || '',
-      gender: data.gender || '',
-      birthdate: data.birthdate || ''
-    })
-  }
+    }
 
-  onSave(){
-    const { id, name, email, password, number, birthdate, address, value, gender} = this.state
-    this.props.onSave({
-      uid: id,
-      name: name,
-      email: email,
-      password: password,
-      number: number,
-      birthdate: birthdate,
-      address: address,
-      value: value,
-      gender: gender
-    })
+  onSave( values ){
+    console.log(values)
+    const { id, name, email, password, number, birthdate, address, value, gender} = values
+      this.props.onSave({
+        uid: this.props.auth.user.uid,
+        name: name,
+        email: email,
+        password: password,
+        number: number,
+        birthdate: birthdate,
+        address: address,
+        value: this.state.value,
+        gender: this.state.gender
+      })
   }
 
   render(){
     const { name, email, password, number, birthdate, address, value, gender} = this.state
-    console.log(gender)
+    const { handleSubmit } = this.props;
+    console.log(this.props.initialValues)
     console.ignoredYellowBox = ['Remote debugger'];
     console.ignoredYellowBox = ['Setting a timer'];
     return(
       <View style={[styles.container]}>
+      <StatusBarAlert
+        visible={this.state.error}
+        message="Please fill data correctly"
+        color="white"
+        backgroundColor="#fc3d39"
+      />
         <ScrollView>
           <View style={[styles.centerContainer, {marginTop: 30}]}>
-                <TextInput
-                  placeholder="Name"
-                  style={[styles.widthForm, {margin:5}]}
-                  onChangeText={(name) => this.setState({name})}
-                  placeholderTextColor="#666666"
-                  underlineColorAndroid="#666666"
-                  value={name}
-                />
+              <Field
+                name="name"
+                component={customInput}
+                placeholder="Name"
+                style={styles.widthForm}
+                placeholderTextColor="#666666"
+                underlineColorAndroid='#666666'
+                initialValue={name}
+              />
 
-                <TextInput
-                  placeholder="Email"
-                  style={[styles.widthForm, {margin:5}]}
-                  onChangeText={(email) => this.setState({email})}
-                  value={email}
-                  placeholderTextColor="#666666"
-                  underlineColorAndroid="#666666"
-                />
+              <Field
+                name="email"
+                component={customInput}
+                placeholder="Email"
+                style={styles.widthForm}
+                placeholderTextColor="#666666"
+                underlineColorAndroid='#666666'
+              />
 
-                <TextInput
-                  placeholder="Password"
-                  style={[styles.widthForm, {margin:5}]}
-                  onChangeText={(password) => this.setState({password})}
-                  value={password}
-                  placeholderTextColor="#666666"
-                  underlineColorAndroid="#666666"
-                  secureTextEntry
-                />
+              <Field
+                name="password"
+                component={customInput}
+                placeholder="Password"
+                secureTextEntry
+                style={styles.widthForm}
+                placeholderTextColor="#666666"
+                underlineColorAndroid='#666666'
+              />
 
-                <TextInput
-                  placeholder="Phone Number"
-                  style={[styles.widthForm, {margin:5}]}
-                  onChangeText={(number) => this.setState({number})}
-                  value={number}
-                  keyboardType="phone-pad"
-                  placeholderTextColor="#666666"
-                  underlineColorAndroid="#666666"
-                />
+              <Field
+                name="number"
+                component={customInput}
+                placeholder="Phone Number"
+                style={styles.widthForm}
+                placeholderTextColor="#666666"
+                underlineColorAndroid='#666666'
+              />
+              <Field
+                name="birthdate"
+                component={customInput}
+                placeholder="Birthdate"
+                style={styles.widthForm}
+                placeholderTextColor="#666666"
+                underlineColorAndroid='#666666'
+              />
 
-                <TextInput
-                  placeholder="1999-12-31"
-                  style={[styles.widthForm, {margin:5}]}
-                  onChangeText={(birthdate) => this.setState({birthdate})}
-                  value={birthdate}
-                  placeholderTextColor="#666666"
-                  underlineColorAndroid="#666666"
-                  keyboardType="numeric"
-                />
+              <Field
+                name="address"
+                component={customInput}
+                placeholder="Address"
+                style={styles.widthForm}
+                placeholderTextColor="#666666"
+                underlineColorAndroid='#666666'
+              />
 
                 <View style={[styles.startContainer, {marginLeft:30}]}>
                   <FormLabel> Gender </FormLabel>
@@ -164,30 +164,20 @@ class EditProfile extends Component {
                       </Picker>
                     </View>
                 </View>
-
-                <TextInput
-                  placeholder="Address"
-                  style={[styles.widthForm, {margin:5}]}
-                  onChangeText={(address) => this.setState({address})}
-                  value={address}
-                  placeholderTextColor="#666666"
-                  underlineColorAndroid="#666666"
-                />
-
                 {
                   this.props.auth.loading ?
                 <ActivityIndicator />
                 :
                 <DefaultButton 
                   style={[styles.defaultButton, {margin:10}]}
-                  onPress={this.onSave.bind(this)}
+                  onPress={handleSubmit(this.onSave.bind(this))}
                   styleText={styles.normalButtonText}
                   text="Save"
                 />
                 }
 
           </View>  
-        </ScrollView>     
+        </ScrollView>
       </View>
     )
   }
@@ -195,7 +185,8 @@ class EditProfile extends Component {
 
 mapStateToProps = (state) => {
   return {
-    auth: state.auth
+    auth: state.auth,
+    initialValues: state.user.user
   };
 }
 
@@ -203,8 +194,45 @@ mapDispatchToProps = (dispatch) => {
   return {
     onSave: (uid, name, email, password, number, birthdate, gender, value, address) => {
       dispatch(editProfile(uid,name, email, password, number, birthdate, gender, value, address)
-    )}
+    )},
+    changeFieldValue: (field, value) => dispatch(change("Name","Wahyu"))
   }
 }
 
-export default connect(mapStateToProps, mapDispatchToProps)(EditProfile);
+const validate = (value) => {
+  const errors = {}
+  const fields = ["name", 'email', 'password', 'number', 'birthdate', 'address']
+  if (!value.name){
+    errors.name="Name is required"
+  }else if (value.name.length < 6){
+    errors.name="Name must be at least 6 characters"
+  }
+  if(!value.email){
+    errors.email = "Email is required"
+  }
+  else if(!/^[A-Z0-9._%+-]+@[A-Z0-9.-]+\.[A-Z]{2,4}$/i.test(value.email)){
+    errors.Email =  'Invalid email address'
+  }
+  if(!value.password){
+    errors.password = "Password is required"
+  }
+  else if (value.password.length < 6){
+    errors.password = "Password must be at least 6 characters"
+  }
+  if(!value.number){
+    errors.number = "Phone Number is required"
+  } else if (value.number.length < 10){
+    errors.number = "Invalid phone number"
+  }
+  if(!/^[0-9]{4}-(0[1-9]|1[0-2])-(0[1-9]|[1-2][0-9]|3[0-1])$/.test(value.birthdate)){
+    errors.birthdate = "Invalid Birth date"
+  }
+  if(value.address.length < 5){
+    errors.address = "Address must be at least 5 characters"
+  }
+  return errors;
+}
+
+Edit = reduxForm({ form:'editProfile', enableReinitialize: true, validate })(EditProfile)
+
+export default connect(mapStateToProps, mapDispatchToProps)(Edit);

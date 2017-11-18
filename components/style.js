@@ -55,7 +55,6 @@ const styles = StyleSheet.create({
 	},
 	rowContainer: {
 		flexDirection:'row',
-		height: 170,
 	},
 	mediumTextSize: {
 		fontSize: 16,
@@ -118,6 +117,30 @@ const styles = StyleSheet.create({
 		borderRadius: 62.5,
 		alignSelf:'center',
 		left:40,
+	},
+	headerCenterBorder:{
+		borderWidth: 1,
+		borderColor:'dodgerblue',
+		padding:5
+	},
+	RowJastipScreen:{
+		flexDirection:'row',
+		justifyContent:'space-between',
+		margin:14
+	},
+	TextTitleJastipScreen: {
+		fontSize: 18,
+		fontWeight:'700',
+		color:'#222'
+	},
+	halfForm: {
+		width: 170,
+		margin:10
+	},
+	largeForm: {
+		width: 360,
+		height: 130,
+		textAlignVertical:'top'
 	}
 })
 

@@ -9,6 +9,7 @@ import {
 	ScrollView,
 	TouchableNativeFeedback,
 	ActivityIndicator,
+	Modal
 } from 'react-native';
 import styles from '../../components/style.js';
 import { fetchingUser, uploadProfilePhoto, uploadCoverPhoto } from '../../actions/';
@@ -17,6 +18,7 @@ import ImagePicker from 'react-native-image-crop-picker';
 import Icon from 'react-native-vector-icons/Ionicons';
 import { connect } from 'react-redux';
 import { Avatar, Divider } from 'react-native-elements';
+import Animation from 'lottie-react-native';
 
 const CANCEL_INDEX = 0
 const options = ['Cancel','Take a selfie', 'Select from gallery']
@@ -32,6 +34,20 @@ class Profile extends Component {
 
   showActionSheet() {
     this.ActionSheet.show()
+	}
+	
+	initAnimation(){
+    if (!this.animation){
+      setTimeout(() => {
+        this.initAnimation();
+      }, 100);
+    } else {
+        this.animation.play();
+    }
+  }
+
+  componentDidMount(){
+    this.initAnimation();
   }
 
   action(i) {
@@ -70,7 +86,6 @@ class Profile extends Component {
 
 	componentDidMount(){
 		const id = this.props.auth.user.uid;
-		console.log(id)
 		this.props.getUser(id);
 	}
 
@@ -141,7 +156,7 @@ class Profile extends Component {
 										</TouchableWithoutFeedback>
 									}
 						</View>
-						<View style={{bottom:50, left: 50, width:110}} >
+						<View style={{bottom:20, left: 50, width:110}} >
 							<TouchableNativeFeedback
 								onPress={() => this.props.navigation.navigate('EditProfile', {data})}
 							>
@@ -191,6 +206,27 @@ class Profile extends Component {
           cancelButtonIndex={CANCEL_INDEX}
           onPress={this.actionCover.bind(this)}
         />
+				<Modal
+          animationType="fade"
+          visible={this.props.user.loading}
+          onRequestClose={() => {console.log("Modal has been closed.")}}
+          >
+          <View style={styles.container}>
+            <View style={styles.centerContainer}>
+            <Animation
+                    ref={animation => {
+                      this.animation = animation;
+                    }}
+                    style={{
+                      width: 200,
+                      height: 100
+                    }}
+                    loop={true}
+                    source={require('../../components/animations/loading_animation.json')}
+                />
+            </View>
+          </View>
+          </Modal>
 		</View>
 		)
 	}

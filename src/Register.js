@@ -14,6 +14,10 @@ import { connect } from 'react-redux';
 import { signUpUser } from '../actions';
 import styles from '../components/style';
 import { DefaultButton, TextButton } from '../components/elements/Button';
+import Animation from 'lottie-react-native';
+import { customInput } from '../components/elements/Input';
+import { reduxForm, Field } from 'redux-form';
+
 
 class Register extends Component {
   state = {
@@ -42,39 +46,44 @@ class Register extends Component {
           <View style={styles.startContainer}>
             <Text style={[styles.indexTitle, { bottom:40, left:20}]}> Register </Text>
           </View>
-              <TextInput
-                placeholder="Name"
-                style={[styles.customForm, {margin:10}]}
-                onChangeText={(name) => this.setState({name})}
-                underlineColorAndroid='#FFFFFF'
-                placeholderTextColor='#FFFFFF'
-              />
 
-              <TextInput
-                placeholder="Email"
-                style={[styles.customForm, {margin:10}]}
-                onChangeText={(email) => this.setState({email})}
-                underlineColorAndroid='#FFFFFF'
-                placeholderTextColor='#FFFFFF'
-              />
+          <Field
+            name="Name"
+            component={customInput}
+            placeholder="Name"
+            placeholderTextColor="#FFFFFF"
+            underlineColorAndroid='#FFFFFF'
+            style={styles.customForm}
+          />
 
-              <TextInput
-                placeholder="Password"
-                style={[styles.customForm, {margin:10}]}
-                underlineColorAndroid='#FFFFFF'
-                placeholderTextColor='#FFFFFF'
-                onChangeText={(password) => this.setState({password})}
-                secureTextEntry
-              />
+          <Field
+            name="Email"
+            component={customInput}
+            placeholder="Email"
+            placeholderTextColor="#FFFFFF"
+            underlineColorAndroid='#FFFFFF'
+            style={styles.customForm}
+          />
 
-              <TextInput
-                placeholder="Phone Number"
-                style={[styles.customForm, {margin:10}]}
-                underlineColorAndroid='#FFFFFF'
-                placeholderTextColor='#FFFFFF'
-                onChangeText={(number) => this.setState({number})}
-                keyboardType="phone-pad"
-              />
+          <Field
+            name="Password"
+            component={customInput}
+            placeholder="Password"
+            secureTextEntry
+            placeholderTextColor="#FFFFFF"
+            underlineColorAndroid='#FFFFFF'
+            style={styles.customForm}
+          />
+
+          <Field
+            name="Phone Number"
+            component={customInput}
+            placeholder="Phone Number"
+            placeholderTextColor="#FFFFFF"
+            underlineColorAndroid='#FFFFFF'
+            style={styles.customForm}
+            keyboardType="numeric"
+          />
               
               {
                 this.props.auth.loading?
@@ -107,5 +116,9 @@ mapDispatchToProps = (dispatch) => {
     )}
   }
 }
+
+
+
+Register = reduxForm({ form: "register" })(Register)
 
 export default connect(mapStateToProps, mapDispatchToProps)(Register);

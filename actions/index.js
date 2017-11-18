@@ -31,7 +31,15 @@ import {
 
   UPLOAD_COVER_PHOTO,
   UPLOAD_COVER_PHOTO_SUCCESS,
-  UPLOAD_COVER_PHOTO_FAILURE
+  UPLOAD_COVER_PHOTO_FAILURE,
+
+  CREATE_POST_REQUEST,
+  CREATE_POST_SUCCESS,
+  CREATE_POST_FAILURE,
+
+  FETCH_POST_REQUEST,
+  FETCH_POST_SUCCESS,
+  FETCH_POST_FAILURE,
 } from '../constants';
 
 export const signInUser = ({ email, password }) => {
@@ -129,7 +137,6 @@ export const fetchingUser = (uid) => {
   return(dispatch) => {
     dispatch({ type: FETCH_USER_REQUEST })
     firebase.database().ref(`user/${uid}`).on('value', (snap) => {
-      console.log(snap.val())
       dispatch({type: FETCH_USER_SUCCESS, payload: snap.val()})
     })
     // .catch((e) => {
@@ -247,3 +254,42 @@ export const uploadCoverPhoto = ({id, image}) => {
       })
     }
   }
+
+export const addPost = ({
+  uid,
+  origin,
+  destination,
+  departure_date,
+  arrival_date,
+  description,
+  max_items,
+  max_weight
+}) => {
+    return(dispatch) => {
+    dispatch({ type: CREATE_POST_REQUEST })
+    firebase.database().ref('Post').push({
+      author_id: uid,
+      origin: origin,
+      destination: destination,
+      departure_date: departure_date,
+      arrival_date: arrival_date,
+      description: description,
+      max_items: max_items,
+      max_weight: max_weight
+    }).then(() => {
+      dispatch({ type: CREATE_POST_SUCCESS })
+    }).catch((e) => {
+      dispatch({ type: CREATE_POST_FAILURE, errorMsg: action.payload })
+    })
+  }
+}
+
+export const fetchPost = () => {
+  return(dispatch) => {
+    dispatch({ type: FETCH_POST_REQUEST })
+    firebase.database().ref('Post').on('value', (snap) => {
+      console.log(snap.val())
+      dispatch({ type: FETCH_POST_SUCCESS, payload: snap.val() })
+    })
+  }
+}

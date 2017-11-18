@@ -7,28 +7,49 @@ import {
   AsyncStorage,
   Button,
   TextInput,
+  Modal,
   ActivityIndicator
 } from 'react-native';
 import { connect } from 'react-redux';
+import { reduxForm, Field } from 'redux-form';
 import { Divider } from 'react-native-elements';
 import { signInFacebook, signInUser } from '../actions';
 import styles from '../components/style';
+import { customInput } from '../components/elements/Input';
 import { DefaultButton, TextButton } from '../components/elements/Button';
-import { Anim } from '../components/elements/Animation';
+import Animation from 'lottie-react-native';
 
 class Signin extends Component {
+  constructor(props){
+    super(props);
   state = {
     email: '',
     password: '',
     loading: this.props.auth.loading
   }
+}
 
-  onLogin(){
-    const { email, password } = this.state
+  onLogin(value){
+    const { Email, Password } = value;
+    console.log(Email, Password)
     this.props.signInUser({
-      email: email,
-      password: password
+      email: Email,
+      password: Password
     });
+  }
+
+  initAnimation(){
+    if (!this.animation){
+      setTimeout(() => {
+        this.initAnimation();
+      }, 100);
+    } else {
+        this.animation.play();
+    }
+  }
+
+  componentDidMount(){
+    this.initAnimation();
   }
 
   onLoginFacebook(){
@@ -38,6 +59,7 @@ class Signin extends Component {
   render(){
     console.ignoredYellowBox = ['Remote debugger'];
     console.ignoredYellowBox = ['Setting a timer'];
+    const { handleSubmit } = this.props;
     return(
       <View style={[styles.container, {backgroundColor:'#1E4072'}]}>
         <View style={styles.centerContainer}>
@@ -45,34 +67,30 @@ class Signin extends Component {
             <Text style={[styles.indexTitle, { bottom:40, left:20}]}> Sign In </Text>
           </View>
 
-          <TextInput
+          <Field
+            name="Email"
+            component={customInput}
             placeholder="Email"
-            style={[styles.customForm, {margin:10}]}
-            onChangeText={(email) => this.setState({email})}
+            placeholderTextColor="#FFFFFF"
             underlineColorAndroid='#FFFFFF'
-            placeholderTextColor='#FFFFFF'
+            style={styles.customForm}
           />
-
-          <TextInput
+          <Field
+            name="Password"
+            component={customInput}
             placeholder="Password"
-            style={[styles.customForm, {margin:10}]}
+            placeholderTextColor="#FFFFFF"
             underlineColorAndroid='#FFFFFF'
-            placeholderTextColor='#FFFFFF'
-            onChangeText={(password) => this.setState({password})}
             secureTextEntry
+            style={styles.customForm}
           />
 
-          {
-            this.props.auth.loading?
-            <ActivityIndicator size="large" />
-            :
             <DefaultButton 
               style={[styles.customButton, {margin:10}]}
-              onPress={this.onLogin.bind(this)}
+              onPress={handleSubmit(this.onLogin.bind(this))}
               styleText={styles.customTextButton}
               text="Sign in"
             />
-          }
           
           <Text style={{ fontSize:12, marginTop:20, marginBottom:15, color:'red'}}> {this.props.auth.error} </Text>
 
@@ -83,33 +101,35 @@ class Signin extends Component {
           />
 
           <Divider style={{backgroundColor:'#FFFFFF', width:'100%', marginTop:20}}/>
-          
-          {
-            this.state.loading?
-            <ActivityIndicator size="large" />
-            :
+                    
           <DefaultButton 
               style={[styles.customButton, {margin:25}]}
               onPress={this.onLoginFacebook.bind(this)}
               styleText={styles.customTextButton}
               text="Sign in with Facebook"
             />
-          }
 
-          {/* <Anim
-            style={styles.modal}
-            ref="modal"
-            backdropPressToClose={false}
-            backdropOpacity={0.7}
-            swipeToClose={false}
-            onOpened={this.onLogin.bind(this)}
-            animRef={ animation => {
-              this.animation = animation
-            }}
-            animStyle={{ width: 200, height:100 }}
-            loop={true}
-            source={require('../components/animations/loading_animation.json')}
-          /> */}
+          <Modal
+          animationType="fade"
+          visible={this.props.auth.loading}
+          onRequestClose={() => {console.log("Modal has been closed.")}}
+          >
+          <View style={styles.container}>
+            <View style={styles.centerContainer}>
+            <Animation
+                    ref={animation => {
+                      this.animation = animation;
+                    }}
+                    style={{
+                      width: 200,
+                      height: 100
+                    }}
+                    loop={true}
+                    source={require('../components/animations/loading_animation.json')}
+                />
+            </View>
+          </View>
+          </Modal>
 
         </View>       
     </View>
@@ -129,5 +149,24 @@ mapDispatchToProps = (dispatch) => {
     signInUser: (email, password) => dispatch(signInUser(email, password))
   }
 }
+const validate = (value) => {
+  const errors = {};
+  const fields = ['Email','Password'];
 
-export default connect(mapStateToProps, mapDispatchToProps)(Signin);
+  fields.forEach((f) => {
+    if(!(f in value)) {
+      errors[f] = `${f} is required`;
+    }
+  })
+  if(!/^[A-Z0-9._%+-]+@[A-Z0-9.-]+\.[A-Z]{2,4}$/i.test(value.Email)){
+    errors.Email =  'Invalid email address'
+  }
+  if (value.Password < 6){
+    errors.Password = 'Password must be at least than 6 characters'
+  }
+  return errors;
+}
+
+Signin = reduxForm({ form:"signin", validate})(Signin);
+
+export default connect(mapStateToProps, mapDispatchToProps )(Signin)

@@ -17,25 +17,25 @@ export default Tabs = TabNavigator({
 	Saved: { screen: Saved,
 	navigationOptions: {
 		tabBarLabel: 'WISHLIST',
-		tabBarIcon: ({ tintColor }) =>  <Icon name="ios-heart-outline" size={35} />
+		tabBarIcon: ({ tintColor }) =>  <Icon name="ios-heart-outline" size={35} color={tintColor} />
 	},
 },
 	Jastip: { screen: Jastip,
 	navigationOptions: {
 		tabBarLabel: 'JASTIP',
-		tabBarIcon: ({ tintColor}) =>  <Icon name="md-list" size={35} />
+		tabBarIcon: ({ tintColor}) =>  <Icon name="md-list" size={35} color={tintColor} />
 	},
 },
 	Message: { screen: Message,
 	navigationOptions: {
 		tabBarLabel: 'MESSAGE',
-		tabBarIcon: ({ tintColor}) =>  <Icon name="ios-chatbubbles-outline" size={35} />
+		tabBarIcon: ({ tintColor}) =>  <Icon name="ios-chatbubbles-outline" size={35} color={tintColor} />
 	},
 },
 	Profile: { screen: Profile,
 	navigationOptions: {
 		tabBarLabel: 'PROFILE',
-		tabBarIcon: ({ tintColor}) =>  <Icon name="ios-person-outline" size={35} color={tintColor}/>
+		tabBarIcon: ({ tintColor }) =>  <Icon name="ios-person-outline" size={35} color={tintColor}/>
 	},
 },
 
@@ -43,9 +43,17 @@ export default Tabs = TabNavigator({
 {
 	tabBarOptions: {
 		 activeTintColor: 'dodgerblue',
-		 pressColor: 'dodgerblue'
+		 pressColor: 'dodgerblue',
+		 inactiveTintColor:'#222',
+		 inactiveBackgroundColor:'#fefefe',
+		 style: {
+			 borderTopWidth: 1,
+			 marginBottom: 3,
+			 backgroundColor: '#fefefe'
+		 }
 	},
 	tabBarComponent: TabBarBottom,
 	tabBarPosition: 'bottom',
 	swipeEnabled: false,
+	initialRouteName:'Explore'
 })

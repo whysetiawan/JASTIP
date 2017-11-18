@@ -1,4 +1,5 @@
 import React, { Component } from 'react';
+import PropTypes from 'prop-types';
 import {
   Text,
   View,
@@ -25,4 +26,11 @@ export const TextButton = (props) => {
         <Text style={styleText}> {text} </Text>
         </TouchableOpacity>
 	)
+}
+
+DefaultButton.PropTypes = {
+  onPress: PropTypes.func.isRequired,
+  style: PropTypes.object,
+  styleText: PropTypes.object,
+  text: PropTypes.string
 }

@@ -9,6 +9,8 @@
 	"dependencies": {
 		"firebase": "^4.6.2",
 		"lottie-react-native": "2.2.7",
+		"persist": "^0.2.7",
+		"prop-types": "^15.6.0",
 		"react": "16.0.0",
 		"react-native": "0.50.3",
 		"react-native-actionsheet": "^2.3.0",
@@ -21,11 +23,14 @@
 		"react-native-image-crop-picker": "^0.18.1",
 		"react-native-instagram-login": "^1.0.3",
 		"react-native-modalbox": "^1.4.2",
+		"react-native-statusbar-alert": "^0.4.0",
 		"react-native-vector-icons": "^4.4.2",
 		"react-navigation": "^1.0.0-beta.19",
 		"react-redux": "^5.0.6",
 		"redux": "^3.7.2",
+		"redux-form": "^7.1.2",
 		"redux-logger": "^3.0.6",
+		"redux-persist": "4.8.2",
 		"redux-thunk": "^2.2.0"
 	},
 	"devDependencies": {
