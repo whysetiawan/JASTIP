@@ -27,19 +27,21 @@ class Register extends Component {
     number: '',
   }
 
-  onRegister(){
-    let { name,email,password,number } = this.state;
+  onRegister(value){
+    console.log(value)
+    const { Name, Email, Password, Number } = value
     this.props.onRegister({
-      name: name,
-      email: email,
-      password: password,
-      number: number,
+      name: Name,
+      email: Email,
+      password: Password,
+      number: Number,
     })
   }
 
   render(){
     console.ignoredYellowBox = ['Remote debugger'];
     console.ignoredYellowBox = ['Setting a timer'];
+    const { handleSubmit } = this.props
     return(
       <View style={[styles.container, {backgroundColor:'#1E4072'}]}>
         <View style={styles.centerContainer}>
@@ -76,7 +78,7 @@ class Register extends Component {
           />
 
           <Field
-            name="Phone Number"
+            name="Number"
             component={customInput}
             placeholder="Phone Number"
             placeholderTextColor="#FFFFFF"
@@ -91,7 +93,7 @@ class Register extends Component {
                 :
               <DefaultButton 
                 style={[styles.customButton, {margin:10}]}
-                onPress={this.onRegister.bind(this)}
+                onPress={handleSubmit(this.onRegister.bind(this))}
                 styleText={styles.customTextButton}
                 text="Register"
               />
@@ -117,8 +119,17 @@ mapDispatchToProps = (dispatch) => {
   }
 }
 
+const validate = (value) => {
+  const errors = {};
+  const fields = ['Name','Email', 'Password','Number']
+  fields.forEach((f) => {
+    if(!(f in value)) {
+      errors[f] = `${f} is required`;
+    }
+  })
+  return errors;
+}
 
-
-Register = reduxForm({ form: "register" })(Register)
+Register = reduxForm({ form: "register", validate })(Register)
 
 export default connect(mapStateToProps, mapDispatchToProps)(Register);
