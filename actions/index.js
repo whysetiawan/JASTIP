@@ -40,6 +40,8 @@ import {
   FETCH_POST_REQUEST,
   FETCH_POST_SUCCESS,
   FETCH_POST_FAILURE,
+
+  CHECK_CONNECTION_STATUS
 } from '../constants';
 
 export const signInUser = ({ email, password }) => {
@@ -48,6 +50,14 @@ return (dispatch) => {
   firebase.auth().signInWithEmailAndPassword(email, password)
   .then((user) => {
     console.log(user)
+    var count;
+    firebase.database().ref(`user/${user.uid}`).once('value', (snap) => {
+      count = snap.val().loggedIn + 1
+    }).then(() => {
+    firebase.database().ref(`user/${user.uid}`).update({
+      loggedIn: count
+      })
+    })
     dispatch({ type: SIGN_IN_SUCCESS, payload: user._user})
     dispatch(NavigationActions.reset({
       index: 0,
@@ -106,7 +116,14 @@ export const signUpUser = ({
         name: name,
         email: email,
         password: password,
-        number: number
+        number: number,
+        address: '',
+        gender: '',
+        birthdate: '',
+        profile_image: '',
+        cover_image: '',
+        value: '',
+        loggedIn: 0,
       })
       dispatch({ type: SIGN_UP_SUCCESS, payload: user })
     })
@@ -287,9 +304,26 @@ export const addPost = ({
 export const fetchPost = () => {
   return(dispatch) => {
     dispatch({ type: FETCH_POST_REQUEST })
+    var items= [];
     firebase.database().ref('Post').on('value', (snap) => {
-      console.log(snap.val())
-      dispatch({ type: FETCH_POST_SUCCESS, payload: snap.val() })
+      snap.forEach((data) => {
+        items.push({
+          key:data.key,
+          author_id: data.val().author_id,
+          origin: data.val().origin,
+          destination: data.val().destination,
+          description: data.val().description,
+          departure_date: data.val().departure_date,
+          arrival_date: data.val().arrival_date,
+          max_items: data.val().max_items,
+          max_weight: data.val().max_weight,
+        })
+      })
+      dispatch({ type: FETCH_POST_SUCCESS, payload: items })
     })
   }
+}
+
+export const connectionStatus = ({ status }) => {
+  return { type: CHECK_CONNECTION_STATUS, isConnected: status }
 }

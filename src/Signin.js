@@ -11,6 +11,7 @@ import {
   ActivityIndicator
 } from 'react-native';
 import { connect } from 'react-redux';
+import { MessageBar,MessageBarManager } from 'react-native-message-bar';
 import { reduxForm, Field } from 'redux-form';
 import { Divider } from 'react-native-elements';
 import { signInFacebook, signInUser } from '../actions';
@@ -36,6 +37,20 @@ class Signin extends Component {
       email: Email,
       password: Password
     });
+    if(this.props.auth.error){
+      MessageBarManager.showAlert({
+        position: 'bottom',
+        message: this.props.auth.errorMsg,
+        alertType: 'error'
+      })
+    }
+    // else{
+    //   MessageBarManager.showAlert({
+    //     position: 'bottom',
+    //     message: 'Signed in',
+    //     alertType: 'success'
+    //   })
+    // }
   }
 
   initAnimation(){
@@ -48,8 +63,13 @@ class Signin extends Component {
     }
   }
 
+  componentWillUnmount(){
+    MessageBarManager.unregisterMessageBar();
+  }
+
   componentDidMount(){
     this.initAnimation();
+    MessageBarManager.registerMessageBar(this.refs.notifications);
   }
 
   onLoginFacebook(){
@@ -112,7 +132,7 @@ class Signin extends Component {
           <Modal
           animationType="fade"
           visible={this.props.auth.loading}
-          onRequestClose={() => {console.log("Modal has been closed.")}}
+          // onRequestClose={() => !this.props.auth.loading }
           >
           <View style={styles.container}>
             <View style={styles.centerContainer}>
@@ -131,7 +151,8 @@ class Signin extends Component {
           </View>
           </Modal>
 
-        </View>       
+        </View>
+        <MessageBar ref="notifications"/>
     </View>
     )
   }
@@ -146,7 +167,7 @@ mapStateToProps = (state) => {
 mapDispatchToProps = (dispatch) => {
   return {
     signInFacebook: () => dispatch(signInFacebook()),
-    signInUser: (email, password) => dispatch(signInUser(email, password))
+    signInUser: (email, password) => dispatch(signInUser(email, password)),
   }
 }
 const validate = (value) => {
@@ -161,7 +182,7 @@ const validate = (value) => {
   if(!/^[A-Z0-9._%+-]+@[A-Z0-9.-]+\.[A-Z]{2,4}$/i.test(value.Email)){
     errors.Email =  'Invalid email address'
   }
-  if (value.Password < 6){
+  if (value.Password && value.Password.length < 6){
     errors.Password = 'Password must be at least than 6 characters'
   }
   return errors;

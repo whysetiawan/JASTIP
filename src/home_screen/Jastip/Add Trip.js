@@ -9,14 +9,17 @@ import {
   TextInput,
   Picker,
   ActivityIndicator,
-  ScrollView
+  ScrollView,
+  Modal
 } from 'react-native';
 import { connect } from 'react-redux';
 import { FormLabel } from 'react-native-elements';
-import StatusBarAlert from 'react-native-statusbar-alert';
+import { Field, reduxForm } from 'redux-form';
 import { addPost } from '../../../actions';
 import styles from '../../../components/style';
+import Animation from 'lottie-react-native';
 import { DefaultButton, TextButton } from '../../../components/elements/Button';
+import { customInput } from '../../../components/elements/Input';
 
 class AddTrip extends Component {
   static navigationOptions = {
@@ -24,128 +27,97 @@ class AddTrip extends Component {
     headerTitleStyle: {alignSelf:'center'},
     headerRight: (<View></View>)
   }
-  constructor(props){
-    super(props);
-    this.state = {
-        id: this.props.auth.user.uid,
-        origin:'',
-        destination: '',
-        departure_date: '',
-        arrival_date:'',
-        description:'',
-        max_items:'',
-        max_weight:'',
-        error: false,
-        }
-  }
-  componentWillMount(){
-  }
-
-  onAdd(){
-    const {
-      id,
-      origin,
-      destination,
-      departure_date,
-      arrival_date,
-      description,
-      max_items,
-      max_weight
-    } = this.state
-    if(origin.length || destination.length || departure_date.length || arrival_date.length ||
-      description.length || max_items.length || max_weight.length <=1 ){
-        this.setState({ error: true })
-    }
-    else{
+  onAdd(value){
+    const { origin, destination, departure, arrival, description, max_items, max_weight } = value;
       this.props.addPost({
-        uid: id,
+        uid: this.props.auth.user.uid,
         origin: origin,
         destination: destination,
-        departure_date: departure_date,
-        arrival_date: arrival_date,
+        departure_date: departure,
+        arrival_date: arrival,
         description: description,
         max_items: max_items,
         max_weight: max_weight
       })
     }
-  }
 
   render(){
     console.ignoredYellowBox = ['Remote debugger'];
     console.ignoredYellowBox = ['Setting a timer'];
+    const { handleSubmit } = this.props
     return(
       <View style={[styles.container]}>
-      <StatusBarAlert
-        visible={this.state.error}
-        message="Please fill data correctly"
-        color="white"
-        backgroundColor="#fc3d39"
-      />
         <ScrollView>
           <View style={[styles.centerContainer, {marginTop: 30}]}>
-                <TextInput
+                
+                <Field
+                  name="origin"
+                  component={customInput}
                   placeholder="Origin"
-                  style={[styles.widthForm, {margin:5}]}
-                  onChangeText={(origin) => this.setState({origin})}
+                  style={styles.widthForm}
                   placeholderTextColor="#666666"
-                  underlineColorAndroid="#666666"
+                  underlineColorAndroid='#666666'
                 />
 
-                <TextInput
+                <Field
+                  name="destination"
+                  component={customInput}
                   placeholder="Destination"
-                  style={[styles.widthForm, {margin:5}]}
-                  onChangeText={(destination) => this.setState({destination})}
+                  style={styles.widthForm}
                   placeholderTextColor="#666666"
-                  underlineColorAndroid="#666666"
+                  underlineColorAndroid='#666666'
                 />
 
                 <View style={styles.rowContainer}>
-                  <TextInput
+                  <Field
+                    name="departure"
+                    component={customInput}
                     placeholder="Departure Date"
                     style={styles.halfForm}
-                    onChangeText={(departure_date) => this.setState({departure_date})}
-                    keyboardType="numeric"
                     placeholderTextColor="#666666"
-                    underlineColorAndroid="#666666"
+                    underlineColorAndroid='#666666'
+                    keyboardType='numeric'
                   />
 
-                  <TextInput
+                  <Field
+                    name="arrival"
+                    component={customInput}
                     placeholder="Arrival Date"
                     style={styles.halfForm}
-                    onChangeText={(arrival_date) => this.setState({arrival_date})}
-                    keyboardType="numeric"
                     placeholderTextColor="#666666"
-                    underlineColorAndroid="#666666"
+                    underlineColorAndroid='#666666'
                   />
                 </View>
 
-                <TextInput
+                <Field
+                  name="description"
+                  component={customInput}
                   placeholder="Description"
-                  style={[styles.largeForm,{margin:5}]}
-                  onChangeText={(description) => this.setState({description})}
+                  style={styles.largeForm}
                   multiline={true}
                   placeholderTextColor="#666666"
-                  underlineColorAndroid="#666666"
+                  underlineColorAndroid='#666666'
                 />
 
                 <View style={styles.rowContainer}>
-                  <TextInput
-                    placeholder="Max Items"
+                  <Field
+                    name="max_item"
+                    component={customInput}
+                    placeholder="Max Item"
                     style={styles.halfForm}
-                    onChangeText={(max_items) => this.setState({max_items})}
-                    keyboardType="numeric"
+                    keyboardType='numeric'
                     placeholderTextColor="#666666"
-                    underlineColorAndroid="#666666"
+                    underlineColorAndroid='#666666'
                   />
 
-                  <TextInput
-                    placeholder="Max Weight"
-                    style={styles.halfForm}
-                    onChangeText={(max_weight) => this.setState({max_weight})}
-                    keyboardType="numeric"
-                    placeholderTextColor="#666666"
-                    underlineColorAndroid="#666666"
-                  />
+                <Field
+                  name="max_weight"
+                  component={customInput}
+                  placeholder="Max Weight"
+                  style={styles.halfForm}
+                  placeholderTextColor="#666666"
+                  underlineColorAndroid='#666666'
+                />
                 </View>
 
                 {
@@ -154,12 +126,32 @@ class AddTrip extends Component {
                 :
                 <DefaultButton 
                   style={[styles.defaultButton, {margin:10}]}
-                  onPress={this.onAdd.bind(this)}
+                  onPress={handleSubmit(this.onAdd.bind(this))}
                   styleText={styles.normalButtonText}
                   text="Post"
                 />
                 }
-
+            <Modal
+              animationType="fade"
+              visible={this.props.auth.loading}
+              onRequestClose={() => {console.log("Modal has been closed.")}}
+              >
+              <View style={styles.container}>
+                <View style={styles.centerContainer}>
+                <Animation
+                        ref={animation => {
+                          this.animation = animation;
+                        }}
+                        style={{
+                          width: 200,
+                          height: 100
+                        }}
+                        loop={true}
+                        source={require('../../../components/animations/loading_animation.json')}
+                    />
+                </View>
+              </View>
+            </Modal>
           </View>  
         </ScrollView>     
       </View>
@@ -197,5 +189,32 @@ mapDispatchToProps = (dispatch) => {
     }
   }
 }
+const validate = (value) => {
+  const errors = {};
+  if (!value.origin){
+    errors.origin = "Origin is required"
+  }
+  if (!value.destination){
+    errors.destination = "Destination is required"
+  }
+  if (!value.departure){
+    errors.departure = "Departure Date is required"
+  }
+  if (!value.arrival){
+    errors.arrival = "Arrival Date is required"
+  }
+  if (!value.description){
+    errors.description = "Description is required"
+  }
+  if (!value.max_item){
+    errors.max_item = "Max Item is required"
+  }
+  if (!value.max_weight){
+    errors.max_weight = "Max Weight is required"
+  }
+  return errors;
+}
 
-export default connect(mapStateToProps, mapDispatchToProps)(AddTrip);
+Add = reduxForm({ form:'addTrip', validate })(AddTrip);
+
+export default connect(mapStateToProps, mapDispatchToProps)(Add);

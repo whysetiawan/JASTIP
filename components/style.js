@@ -141,6 +141,33 @@ const styles = StyleSheet.create({
 		width: 360,
 		height: 130,
 		textAlignVertical:'top'
+	},
+	rowHeaderExplore:{
+		alignItems:'center',
+		justifyContent:'center',
+		borderWidth:0.7,
+		flex:1,
+		height:40
+	},
+	exploreBoldText:{
+		fontWeight:'bold',
+		color:'#222',
+		fontSize: 15
+	},
+	exploreContainerListview: {
+		margin: 10,
+	},
+	listViewTrip: {
+		backgroundColor:'#1E4072',
+		height: 40,
+		width: 300,
+		flexDirection:'row',
+		alignItems:'center',
+		justifyContent:'center'
+	},
+	listViewTripText: {
+		color:'#FFFFFF',
+		fontWeight:'500'
 	}
 })
 

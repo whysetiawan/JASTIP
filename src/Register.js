@@ -13,6 +13,7 @@ import {
 import { connect } from 'react-redux';
 import { signUpUser } from '../actions';
 import styles from '../components/style';
+import { MessageBar, MessageBarManager } from 'react-native-message-bar';
 import { DefaultButton, TextButton } from '../components/elements/Button';
 import Animation from 'lottie-react-native';
 import { customInput } from '../components/elements/Input';
@@ -27,6 +28,14 @@ class Register extends Component {
     number: '',
   }
 
+  componentDidMount(){
+    MessageBarManager.registerMessageBar(this.refs.success);
+  }
+
+  componentWillUnmount(){
+    MessageBarManager.unregisterMessageBar();
+  }
+
   onRegister(value){
     console.log(value)
     const { Name, Email, Password, Number } = value
@@ -36,6 +45,22 @@ class Register extends Component {
       password: Password,
       number: Number,
     })
+    if(!this.props.auth.error){
+      MessageBarManager.showAlert({
+        alertType: 'success',
+        message: 'Register Success',
+        position: 'bottom',
+        duration: 5000
+      })
+    }
+    else{
+      MessageBarManager.showAlert({
+        alertType: 'error',
+        message: this.props.auth.errorMsg,
+        position:'bottom',
+        duration: 5000
+      })
+    }
   }
 
   render(){
@@ -99,7 +124,8 @@ class Register extends Component {
               />
               }
 
-      </View>       
+      </View>
+              <MessageBar ref="success" />
     </View>
     )
   }

@@ -4,6 +4,7 @@ import navReducer from './nav';
 import authReducer from './auth';
 import userReducer from './user';
 import postReducer from './post';
+import connectReducer from './connect';
 
 export default allReducer = combineReducers({
         nav: navReducer,
@@ -11,4 +12,5 @@ export default allReducer = combineReducers({
         user: userReducer,
         form: formReducer,
         post: postReducer,
+        connect: connectReducer,
     });

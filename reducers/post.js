@@ -10,7 +10,7 @@ import {
 
 const initState={
   loading: false,
-  data: {},
+  data: [],
   error:false,
   errorMsg: ''
 }

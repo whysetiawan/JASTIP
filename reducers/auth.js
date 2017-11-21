@@ -17,7 +17,7 @@ const initialState = {
   loading:false,
   user: {},
   error: true,
-  errormsg: '',
+  errorMsg: '',
   igToken: ''
 };
 
@@ -33,13 +33,15 @@ export default authReducer = (state = initialState, action) => {
       ...state,
       loading: false,
       loggedIn: true,
-      user: action.payload
+      user: action.payload,
+      error: false,
     }
     case SIGN_IN_FAILURE:
     return {
       ...state,
       loading: false,
-      error: action.payload
+      error: true,
+      errorMsg: action.payload
     }
     case SIGN_UP_REQUEST:
     return {
@@ -50,13 +52,15 @@ export default authReducer = (state = initialState, action) => {
     return {
       ...state,
       user: action.payload,
-      loading: false
+      loading: false,
+      error: false,
     }
     case SIGN_UP_FAILURE:
     return {
       ...state,
       loading:false,
-      error: action.payload
+      error: true,
+      errorMsg: action.payload
     }
     // case INSTAGRAM_REQUEST:
     // return {

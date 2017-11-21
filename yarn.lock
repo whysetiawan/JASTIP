@@ -3747,6 +3747,10 @@ react-native-instagram-login@^1.0.3:
   version "1.0.3"
   resolved "https://registry.yarnpkg.com/react-native-instagram-login/-/react-native-instagram-login-1.0.3.tgz#a1c990be537f5e1281edc1539e381a2cc8bac3b1"
 
+react-native-message-bar@^2.0.6:
+  version "2.0.6"
+  resolved "https://registry.yarnpkg.com/react-native-message-bar/-/react-native-message-bar-2.0.6.tgz#2b25d197d587ab870261c786c04920ba1276e03b"
+
 react-native-modalbox@^1.4.2:
   version "1.4.2"
   resolved "https://registry.yarnpkg.com/react-native-modalbox/-/react-native-modalbox-1.4.2.tgz#818c9354c9b13327ec807c6436e8516b3b419478"

@@ -10,11 +10,14 @@ import {
   Picker,
   ActivityIndicator,
   ScrollView,
+  Modal
 } from 'react-native';
 import { connect } from 'react-redux';
 import { Field, reduxForm, change } from'redux-form';
 import { FormLabel } from 'react-native-elements';
+import { MessageBar, MessageBarManager } from 'react-native-message-bar';
 import StatusBarAlert from 'react-native-statusbar-alert';
+import Animation from 'lottie-react-native';
 import { editProfile } from '../../../actions';
 import { customInput } from '../../../components/elements/Input';
 import styles from '../../../components/style';
@@ -40,6 +43,24 @@ class EditProfile extends Component {
         error: false
         }
     }
+    initAnimation(){
+      if (!this.animation){
+        setTimeout(() => {
+          this.initAnimation();
+        }, 100);
+      } else {
+          this.animation.play();
+      }
+    }
+  
+    componentWillUnmount(){
+      MessageBarManager.unregisterMessageBar();
+    }
+  
+    componentDidMount(){
+      this.initAnimation();
+      MessageBarManager.registerMessageBar(this.refs.notifications);
+    }
 
   onSave( values ){
     console.log(values)
@@ -55,6 +76,20 @@ class EditProfile extends Component {
         value: this.state.value,
         gender: this.state.gender
       })
+      if(!this.props.auth.error){
+        MessageBarManager.showAlert({
+          position: 'bottom',
+          message: "Profile Updated",
+          alertType: 'success'
+        })
+      }
+      else{
+        MessageBarManager.showAlert({
+          position: 'bottom',
+          message: "Error occured please check your connection",
+          alertType: 'error'
+        })
+      }
   }
 
   render(){
@@ -65,12 +100,6 @@ class EditProfile extends Component {
     console.ignoredYellowBox = ['Setting a timer'];
     return(
       <View style={[styles.container]}>
-      <StatusBarAlert
-        visible={this.state.error}
-        message="Please fill data correctly"
-        color="white"
-        backgroundColor="#fc3d39"
-      />
         <ScrollView>
           <View style={[styles.centerContainer, {marginTop: 30}]}>
               <Field
@@ -80,7 +109,6 @@ class EditProfile extends Component {
                 style={styles.widthForm}
                 placeholderTextColor="#666666"
                 underlineColorAndroid='#666666'
-                initialValue={name}
               />
 
               <Field
@@ -178,6 +206,29 @@ class EditProfile extends Component {
 
           </View>  
         </ScrollView>
+        <Modal
+          animationType="fade"
+          visible={this.props.auth.loading}
+          onRequestClose={() => !this.props.auth.loading }
+          >
+          <View style={styles.container}>
+            <View style={styles.centerContainer}>
+            <Animation
+                    ref={animation => {
+                      this.animation = animation;
+                    }}
+                    style={{
+                      width: 200,
+                      height: 100
+                    }}
+                    loop={true}
+                    source={require('../../../components/animations/loading_animation.json')}
+                />
+            </View>
+          </View>
+          </Modal>
+
+        <MessageBar ref="notifications"/>
       </View>
     )
   }
@@ -195,13 +246,11 @@ mapDispatchToProps = (dispatch) => {
     onSave: (uid, name, email, password, number, birthdate, gender, value, address) => {
       dispatch(editProfile(uid,name, email, password, number, birthdate, gender, value, address)
     )},
-    changeFieldValue: (field, value) => dispatch(change("Name","Wahyu"))
   }
 }
 
 const validate = (value) => {
   const errors = {}
-  const fields = ["name", 'email', 'password', 'number', 'birthdate', 'address']
   if (!value.name){
     errors.name="Name is required"
   }else if (value.name.length < 6){
@@ -211,7 +260,7 @@ const validate = (value) => {
     errors.email = "Email is required"
   }
   else if(!/^[A-Z0-9._%+-]+@[A-Z0-9.-]+\.[A-Z]{2,4}$/i.test(value.email)){
-    errors.Email =  'Invalid email address'
+    errors.email =  'Invalid email address'
   }
   if(!value.password){
     errors.password = "Password is required"

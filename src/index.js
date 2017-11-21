@@ -7,8 +7,9 @@ import {
 } from 'react-native';
 import styles from '../components/style.js';
 import { DefaultButton, TextButton } from '../components/elements/Button';
+import {connect} from 'react-redux';
 
-export default class Index extends Component {
+class Index extends Component {
 	render(){
   	console.ignoredYellowBox = ['Remote debugger'];
 		console.ignoredYellowBox = ['Setting a timer'];
@@ -37,3 +38,11 @@ export default class Index extends Component {
 		)
 	}
 }
+
+const mapStateToProps = (state) => {
+	return{
+	connect: state.connect
+	}
+}
+
+export default connect(mapStateToProps)(Index)
