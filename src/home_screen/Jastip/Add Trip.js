@@ -101,7 +101,7 @@ class AddTrip extends Component {
 
                 <View style={styles.rowContainer}>
                   <Field
-                    name="max_item"
+                    name="max_items"
                     component={customInput}
                     placeholder="Max Item"
                     style={styles.halfForm}

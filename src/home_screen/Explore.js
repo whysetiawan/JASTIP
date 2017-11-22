@@ -6,7 +6,8 @@ import {
   TouchableOpacity,
   ListView,
   ActivityIndicator,
-  NetInfo
+  NetInfo,
+  TouchableWithoutFeedback
 } from 'react-native';
 import styles from '../../components/style.js';
 import { connect } from 'react-redux';
@@ -18,38 +19,24 @@ import firebase from 'react-native-firebase';
 
 class Explore extends Component {
   constructor(){
-    super();
-    this.state = {
-      dataSource: new ListView.DataSource({ rowHasChanged: (row1, row2) => row1 !== row2 }),
-    }
+    super()
+      this.state = {
+        dataSource: new ListView.DataSource({ rowHasChanged: (r1, r2) => r1 !== r2 })
+      }
   }
 
-  componentWillUnmount(){
-    NetInfo.isConnected.removeEventListener('connectionChange', this._handleConnection)
+  async componentWillMount(){
+    await this.props.fetchPost();
   }
 
-  _handleConnection = (isConnected) => {
-    this.props.dispatch(connectionStatus({ status: isConnected }))
-  }
-
-	componentDidMount(){
-    // firebase.database().ref('user').on('value', (snap) => {
-    //   console.log(snap.val())
-    // })
-    this.props.fetchPost();
+  componentWillReceiveProps(nextProps) {
     this.setState({
-      dataSource: this.state.dataSource.cloneWithRows(this.props.post.data)
+      dataSource: this.state.dataSource.cloneWithRows(nextProps.post.data)
     })
-    NetInfo.isConnected.addEventListener('connectionChange', this._handleConnection)
-  }
-
-  fetchData(){
-      // this.setState({
-      //   dataSource: this.state.dataSource.cloneWithRows(items)
-      // })
   }
 
   renderRow(post) {
+		// const {navigate} = this.props.navigation;
     const { author_id, key, origin, destination, description, max_items, max_weight } = post
     return(
       <View style={[styles.rowContainer, {borderBottomWidth: 0.7, borderColor:'#666666', margin: 5 }]}>
@@ -63,11 +50,15 @@ class Explore extends Component {
           <View>
             <Text style={styles.exploreBoldText} > Tobias Eaton </Text>
           </View>
-          <View style={styles.listViewTrip}>
+          <TouchableWithoutFeedback
+            onPress={ () => this.props.navigation.navigate('Detail', {post})}
+          >
+          <View style={styles.listViewTrip} key={key} >          
             <Text style={styles.listViewTripText}> {origin} </Text>
               <Icon name="md-arrow-round-forward" size={20} color="#FFFFFF" style={{marginLeft: 10, marginRight:10}} />
             <Text style={styles.listViewTripText}> {destination} </Text>
           </View>
+          </TouchableWithoutFeedback>
           <View>
             <Text style={styles.normalTextSize}> {`Depart at ${post.departure_date}`} </Text>
             <Text style={styles.normalTextSize}> {`Arrive at ${post.arrival_date}`} </Text>
@@ -78,9 +69,8 @@ class Explore extends Component {
   }
 
 	render(){
-  	console.ignoredYellowBox = ['Remote debugger'];
+    console.ignoredYellowBox = ['Remote debugger'];
     console.ignoredYellowBox = ['Setting a timer'];
-    // console.log(this.props.post.data[0].author_id)
 		return(
 		<View style={styles.container}>
       <Header 
@@ -110,7 +100,7 @@ class Explore extends Component {
         <ListView
           enableEmptySections
           dataSource={this.state.dataSource}
-          renderRow={this.renderRow}
+          renderRow={this.renderRow.bind(this)}
         />
       </View>
 

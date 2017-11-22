@@ -19,7 +19,6 @@ class App extends Component{
   }
 
   render(){
-    console.log(this.props.connect)
     const { dispatch, nav } = this.props
     return(
       <AppNavigator navigation={addNavigationHelpers({

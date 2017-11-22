@@ -6,6 +6,7 @@ import Forgot from '../../src/Forgot Password';
 import Tabs from './TabScreen';
 import EditProfile from '../../src/home_screen/Profile/Edit Profile';
 import AddTrip from '../../src/home_screen/Jastip/Add Trip';
+import Detail from '../../src/home_screen/Explore/Detail';
 
 export default StackScreen = {
   Index : { screen: Index },
@@ -15,7 +16,9 @@ export default StackScreen = {
   Tabs: { screen: Tabs,
     navigationOptions: {
       header: false
-  } },
+    } 
+  },
   EditProfile: { screen: EditProfile },
   AddTrip: { screen: AddTrip },
+  Detail: { screen: Detail },
 }

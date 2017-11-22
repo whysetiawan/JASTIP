@@ -305,6 +305,7 @@ export const fetchPost = () => {
   return(dispatch) => {
     dispatch({ type: FETCH_POST_REQUEST })
     var items= [];
+    var user = [];
     firebase.database().ref('Post').on('value', (snap) => {
       snap.forEach((data) => {
         items.push({
@@ -318,6 +319,9 @@ export const fetchPost = () => {
           max_items: data.val().max_items,
           max_weight: data.val().max_weight,
         })
+        // firebase.database().ref(`user/${data.val().author_id}`).on('value', (snap) => {
+        //   items.push(snap.val())
+        // })
       })
       dispatch({ type: FETCH_POST_SUCCESS, payload: items })
     })

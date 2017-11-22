@@ -23,7 +23,7 @@ import Animation from 'lottie-react-native';
 class Signin extends Component {
   constructor(props){
     super(props);
-  state = {
+  this.state = {
     email: '',
     password: '',
     loading: this.props.auth.loading

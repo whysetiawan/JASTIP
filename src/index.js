@@ -18,6 +18,7 @@ class Index extends Component {
 		<View style={[styles.container, {backgroundColor:'#1E4072'}]}>
 			<View style={styles.centerContainer} >
 				<View style={styles.startContainer}>
+					{!this.props.connect.isConnected ? <Text> OFF </Text> : <Text> ON </Text>}
 					<Text style={[styles.indexTitle, {bottom:80, left:35 }]}> Welcome to JASTIP </Text>
 				</View>				
 						<DefaultButton 
