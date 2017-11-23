@@ -7,6 +7,7 @@ import {
 } from 'react-native';
 import styles from '../../../components/style.js';
 import { Field, reduxForm } from 'redux-form';
+import MapView from 'react-native-maps';
 import { connect } from 'react-redux';
 import { customInput } from '../../../components/elements/Input';
 
@@ -63,7 +64,17 @@ class Order extends Component {
           />
           
           <Text style={[styles.smallTextSize, {marginTop:15}]}> Please pick some picture of the items </Text> 
-
+          <View>
+          <MapView
+              style={{width:400, height:200}}
+							initialRegion={{
+								latitude: 37.78825,
+								longitude: -122.4324,
+								latitudeDelta: 0.0922,
+								longitudeDelta: 0.0421,
+							}}
+						/>
+          </View>
         </View>
 			</View>
 		</View>

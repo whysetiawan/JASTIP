@@ -19,7 +19,7 @@ import { MessageBar, MessageBarManager } from 'react-native-message-bar';
 import StatusBarAlert from 'react-native-statusbar-alert';
 import Animation from 'lottie-react-native';
 import { editProfile } from '../../../actions';
-import { customInput } from '../../../components/elements/Input';
+import { customInput, datePicker } from '../../../components/elements/Input';
 import styles from '../../../components/style';
 import { DefaultButton, TextButton } from '../../../components/elements/Button';
 
@@ -140,11 +140,11 @@ class EditProfile extends Component {
               />
               <Field
                 name="birthdate"
-                component={customInput}
+                component={datePicker}
                 placeholder="Birthdate"
                 style={styles.widthForm}
-                placeholderTextColor="#666666"
-                underlineColorAndroid='#666666'
+                minDate="1970-01-01"
+                maxDate="2017-12-31"
               />
 
               <Field

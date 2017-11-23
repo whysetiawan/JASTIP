@@ -134,7 +134,7 @@ const styles = StyleSheet.create({
 		color:'#222'
 	},
 	halfForm: {
-		width: 170,
+		width: 165,
 		margin:10
 	},
 	largeForm: {

@@ -19,7 +19,7 @@ import { addPost } from '../../../actions';
 import styles from '../../../components/style';
 import Animation from 'lottie-react-native';
 import { DefaultButton, TextButton } from '../../../components/elements/Button';
-import { customInput } from '../../../components/elements/Input';
+import { customInput, datePicker } from '../../../components/elements/Input';
 
 class AddTrip extends Component {
   static navigationOptions = {
@@ -79,7 +79,7 @@ class AddTrip extends Component {
                 <View style={styles.rowContainer}>
                   <Field
                     name="departure"
-                    component={customInput}
+                    component={datePicker}
                     placeholder="Departure Date"
                     style={styles.halfForm}
                     placeholderTextColor="#666666"
@@ -89,7 +89,7 @@ class AddTrip extends Component {
 
                   <Field
                     name="arrival"
-                    component={customInput}
+                    component={datePicker}
                     placeholder="Arrival Date"
                     style={styles.halfForm}
                     placeholderTextColor="#666666"
