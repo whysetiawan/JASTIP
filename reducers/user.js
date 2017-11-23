@@ -13,13 +13,18 @@ import {
 
   UPLOAD_COVER_PHOTO,
   UPLOAD_COVER_PHOTO_SUCCESS,
-  UPLOAD_COVER_PHOTO_FAILURE
+  UPLOAD_COVER_PHOTO_FAILURE,
+
+  ADD_TO_WISHLIST_REQUEST,
+  ADD_TO_WISHLIST_SUCCESS,
+  ADD_TO_WISHLIST_FAILURE
 } from '../constants';
 
 const initState = {
   loading: false,
   user: {},
-  error: ''
+  error: false,
+  errorMsg: ''
 }
 
 export default userReducer = (state= initState, action) => {
@@ -39,7 +44,8 @@ export default userReducer = (state= initState, action) => {
     return {
       ...state,
       loading:false,
-      error: action.payload
+      error: true,
+      errorMsg: action.payload
     }
     case UPDATE_USER_REQUEST:
     return {
@@ -55,7 +61,8 @@ export default userReducer = (state= initState, action) => {
     return {
       ...state,
       loading:false,
-      error: action.payload
+      error: true,
+      errorMsg: action.payload
     }
     case UPLOAD_PROFILE_PHOTO:
     return {
@@ -75,7 +82,7 @@ export default userReducer = (state= initState, action) => {
     return {
       ...state,
       loading:false,
-      error: action.payload
+      errorMsg: action.payload
     }
     case UPLOAD_COVER_PHOTO:
     return {
@@ -95,7 +102,22 @@ export default userReducer = (state= initState, action) => {
     return {
       ...state,
       loading: false,
-      error: action.payload
+      error: true,
+      errorMsg: action.payload
+    }
+    case ADD_TO_WISHLIST_REQUEST:
+    return {
+      ...state,
+    }
+    case ADD_TO_WISHLIST_SUCCESS:
+    return {
+      ...state,
+    }
+    case ADD_TO_WISHLIST_FAILURE:
+    return {
+      ...state,
+      error : true,
+      errorMsg: action.payload
     }
     default:
     return state

@@ -55,5 +55,5 @@ export default Tabs = TabNavigator({
 	tabBarComponent: TabBarBottom,
 	tabBarPosition: 'bottom',
 	swipeEnabled: false,
-	initialRouteName:'Explore'
+	initialRouteName:'Explore',
 })

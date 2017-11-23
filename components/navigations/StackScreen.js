@@ -7,6 +7,8 @@ import Tabs from './TabScreen';
 import EditProfile from '../../src/home_screen/Profile/Edit Profile';
 import AddTrip from '../../src/home_screen/Jastip/Add Trip';
 import Detail from '../../src/home_screen/Explore/Detail';
+import Order from '../../src/home_screen/Explore/Order';
+import ProfileExt from '../../src/home_screen/Explore/ProfileExternal';
 
 export default StackScreen = {
   Index : { screen: Index },
@@ -21,4 +23,6 @@ export default StackScreen = {
   EditProfile: { screen: EditProfile },
   AddTrip: { screen: AddTrip },
   Detail: { screen: Detail },
+  Order : { screen: Order },
+  ProfileExt: { screen: ProfileExt }
 }

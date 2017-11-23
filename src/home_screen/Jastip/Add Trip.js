@@ -27,10 +27,18 @@ class AddTrip extends Component {
     headerTitleStyle: {alignSelf:'center'},
     headerRight: (<View></View>)
   }
-  onAdd(value){
-    const { origin, destination, departure, arrival, description, max_items, max_weight } = value;
+  onAdd(post){
+    const { origin, destination, departure, arrival, description, max_items, max_weight } = post;
+    const { name , email, gender, birthdate, cover_image, profile_image, value } = this.props.user.user
       this.props.addPost({
         uid: this.props.auth.user.uid,
+        name: name,
+        email: email,
+        gender: gender,
+        birthdate: birthdate,
+        cover_image: cover_image,
+        profile_image: profile_image,
+        value: value,
         origin: origin,
         destination: destination,
         departure_date: departure,
@@ -161,7 +169,8 @@ class AddTrip extends Component {
 
 mapStateToProps = (state) => {
   return {
-    auth: state.auth
+    auth: state.auth,
+    user: state.user
   };
 }
 
@@ -169,6 +178,13 @@ mapDispatchToProps = (dispatch) => {
   return {
     addPost: (
       uid,
+      name,
+      email,
+      gender,
+      birthdate,
+      cover_image,
+      profile_image,
+      value,
       origin,
       destination,
       departure_date,
@@ -179,13 +195,21 @@ mapDispatchToProps = (dispatch) => {
     ) => {
       dispatch(addPost(
         uid,
+        name,
+        email,
+        gender,
+        birthdate,
+        cover_image,
+        profile_image,
+        value,
         origin,
         destination,
         departure_date,
         arrival_date,
         description,
         max_items,
-        max_weight))
+        max_weight
+      ))
     }
   }
 }

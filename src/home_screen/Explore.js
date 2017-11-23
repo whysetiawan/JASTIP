@@ -7,7 +7,8 @@ import {
   ListView,
   ActivityIndicator,
   NetInfo,
-  TouchableWithoutFeedback
+  TouchableWithoutFeedback,
+  ScrollView
 } from 'react-native';
 import styles from '../../components/style.js';
 import { connect } from 'react-redux';
@@ -37,18 +38,19 @@ class Explore extends Component {
 
   renderRow(post) {
 		// const {navigate} = this.props.navigation;
-    const { author_id, key, origin, destination, description, max_items, max_weight } = post
+    const { author_id, profile_image, cover_image, name, email, gender, value, birthdate, key, origin, destination, description, max_items, max_weight } = post
     return(
       <View style={[styles.rowContainer, {borderBottomWidth: 0.7, borderColor:'#666666', margin: 5 }]}>
         <View style={styles.exploreContainerListview}>
           <Avatar 
           rounded
           large
+          source={{uri: profile_image}}
           />
         </View>
         <View style={styles.exploreContainerListview}>
           <View>
-            <Text style={styles.exploreBoldText} > Tobias Eaton </Text>
+            <Text style={styles.exploreBoldText} > {name} </Text>
           </View>
           <TouchableWithoutFeedback
             onPress={ () => this.props.navigation.navigate('Detail', {post})}
@@ -85,6 +87,7 @@ class Explore extends Component {
         )
       }
       />
+      <ScrollView>
       <View style={styles.rowContainer}>
       
         <View style={styles.rowHeaderExplore}>
@@ -103,7 +106,7 @@ class Explore extends Component {
           renderRow={this.renderRow.bind(this)}
         />
       </View>
-
+      </ScrollView>
 		</View>
 		)
 	}

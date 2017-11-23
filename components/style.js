@@ -3,7 +3,7 @@ import {StyleSheet} from 'react-native';
 const styles = StyleSheet.create({
 	container: {
 		flex: 1,
-		backgroundColor: '#fefefe'
+		backgroundColor: '#ecf0f1'
 	},
 	centerContainer: {
 		flex: 1,
@@ -167,8 +167,33 @@ const styles = StyleSheet.create({
 	},
 	listViewTripText: {
 		color:'#FFFFFF',
-		fontWeight:'500'
-	}
+		fontWeight:'500',
+	},
+	profileExtContainer: {
+		margin:10,
+		width:390,
+	},
+	bigBoltText: {
+		fontSize: 17,
+		fontWeight: 'bold',
+		color:'#222',
+	},
+	relationsContainer: {
+		width:'33%',
+		alignItems:'center',
+		justifyContent:'center',
+		height:75,
+	},
+	smallButton: {
+		width: 100,
+		height: 35,
+		backgroundColor: 'transparent',
+		alignItems: 'center',
+		justifyContent: 'center',
+		borderWidth: 1,
+		borderColor: '#222',
+		margin: 10
+}
 })
 
 export default styles;

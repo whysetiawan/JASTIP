@@ -5,6 +5,8 @@ import authReducer from './auth';
 import userReducer from './user';
 import postReducer from './post';
 import connectReducer from './connect';
+import chatroom from './chatroom';
+import messages from'./messages';
 
 export default allReducer = combineReducers({
         nav: navReducer,
@@ -13,4 +15,6 @@ export default allReducer = combineReducers({
         form: formReducer,
         post: postReducer,
         connect: connectReducer,
+        chatroom,
+        messages
     });
