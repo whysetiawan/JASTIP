@@ -16,6 +16,7 @@ import { connect } from 'react-redux';
 import { Field, reduxForm, change } from'redux-form';
 import { FormLabel } from 'react-native-elements';
 import { MessageBar, MessageBarManager } from 'react-native-message-bar';
+import { GooglePlacesAutocomplete } from 'react-native-google-places-autocomplete';
 import StatusBarAlert from 'react-native-statusbar-alert';
 import Animation from 'lottie-react-native';
 import { editProfile } from '../../../actions';
@@ -147,14 +148,58 @@ class EditProfile extends Component {
                 maxDate="2017-12-31"
               />
 
-              <Field
+              <GooglePlacesAutocomplete
+                debounce={0}
+                listViewDisplayed='auto'
+                enablePoweredByContainer={false}
+                placeholder='Address'
+                placeholderTextColor="#222"
+                underlineColorAndroid="#222"
+                maxLength={1}
+                returnKeyType={'search'}
+                autoFocus={false}
+                fetchDetails={true}
+                renderDescription={row => row.description}
+                styles={{
+                  textInputContainer: {
+                    backgroundColor: 'rgba(0,0,0,0)',
+                    borderTopWidth: 0,
+                    width:'95%'
+                  },
+                  textInput: {
+                    height: 38,
+                    backgroundColor:'transparent',
+                    width:'100%'
+                  },
+                  predefinedPlacesDescription: {
+                    color: '#222',
+                    types: 'address',
+                  },
+                  description:{
+                    color:'#222'
+                  },
+                  listView:{
+                    marginLeft: 40,
+                    height:50
+                  }
+                }}
+                getDefaultValue={ () => 'Bandung, Bandung City, West Java, Indonesia'}
+                query={{
+                  key: 'AIzaSyB1QYooomCr1o_TKMukX6w4-aPx_nIw0J0'
+                }}
+                onPress={(data, details = null) => {
+                console.log(details);
+              }}
+              />
+
+              {/* <Field
                 name="address"
                 component={customInput}
                 placeholder="Address"
                 style={styles.widthForm}
                 placeholderTextColor="#666666"
                 underlineColorAndroid='#666666'
-              />
+              /> */}
 
                 <View style={[styles.startContainer, {marginLeft:30}]}>
                   <FormLabel> Gender </FormLabel>
