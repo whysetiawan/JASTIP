@@ -37,7 +37,7 @@ class EditProfile extends Component {
         email: '',
         password: '',
         number: '',
-        address: '',
+        address: this.props.initialValues.address,
         value: this.props.initialValues.value || '10.000',
         gender: this.props.initialValues.gender,
         birthdate:'',
@@ -73,11 +73,12 @@ class EditProfile extends Component {
         password: password,
         number: number,
         birthdate: birthdate,
-        address: address,
+        address: this.state.address,
+        location: this.state.location,
         value: this.state.value,
         gender: this.state.gender
       })
-      if(!this.props.auth.error){
+      if(!this.props.user.error){
         MessageBarManager.showAlert({
           position: 'bottom',
           message: "Profile Updated",
@@ -96,7 +97,6 @@ class EditProfile extends Component {
   render(){
     const { name, email, password, number, birthdate, address, value, gender} = this.state
     const { handleSubmit } = this.props;
-    console.log(this.props.initialValues)
     console.ignoredYellowBox = ['Remote debugger'];
     console.ignoredYellowBox = ['Setting a timer'];
     return(
@@ -155,8 +155,6 @@ class EditProfile extends Component {
                 placeholder='Address'
                 placeholderTextColor="#222"
                 underlineColorAndroid="#222"
-                maxLength={1}
-                returnKeyType={'search'}
                 autoFocus={false}
                 fetchDetails={true}
                 renderDescription={row => row.description}
@@ -180,15 +178,18 @@ class EditProfile extends Component {
                   },
                   listView:{
                     marginLeft: 40,
-                    height:50
+                    height:50,
                   }
                 }}
-                getDefaultValue={ () => 'Bandung, Bandung City, West Java, Indonesia'}
+                getDefaultValue={ () => this.state.address}
                 query={{
                   key: 'AIzaSyB1QYooomCr1o_TKMukX6w4-aPx_nIw0J0'
                 }}
                 onPress={(data, details = null) => {
-                console.log(details);
+                  this.setState({
+                    address: details.formatted_address,
+                    location: details.geometry.location
+                  })
               }}
               />
 
@@ -224,16 +225,16 @@ class EditProfile extends Component {
                         selectedValue={value}
                         onValueChange={(itemValue) => this.setState({ value: itemValue})}
                       >
-                        <Picker.Item label="Rp 10.000" value="10.000" />
-                        <Picker.Item label="Rp 20.000" value="20.000"/>
-                        <Picker.Item label="Rp 30.000" value="30.000"/>
-                        <Picker.Item label="Rp 40.000" value="40.000"/>
-                        <Picker.Item label="Rp 50.000" value="50.000"/>
-                        <Picker.Item label="Rp 60.000" value="60.000"/>
-                        <Picker.Item label="Rp 70.000" value="70.000"/>
-                        <Picker.Item label="Rp 80.000" value="80.000"/>
-                        <Picker.Item label="Rp 90.000" value="90.000"/>
-                        <Picker.Item label="Rp 100.000" value="100.000"/>
+                        <Picker.Item label="Rp 10.000" value={10000} />
+                        <Picker.Item label="Rp 20.000" value={20000}/>
+                        <Picker.Item label="Rp 30.000" value={30000}/>
+                        <Picker.Item label="Rp 40.000" value={40000}/>
+                        <Picker.Item label="Rp 50.000" value={50000}/>
+                        <Picker.Item label="Rp 60.000" value={60000}/>
+                        <Picker.Item label="Rp 70.000" value={70000}/>
+                        <Picker.Item label="Rp 80.000" value={80000}/>
+                        <Picker.Item label="Rp 90.000" value={90000}/>
+                        <Picker.Item label="Rp 100.000" value={100000}/>
                       </Picker>
                     </View>
                 </View>
@@ -253,7 +254,7 @@ class EditProfile extends Component {
         </ScrollView>
         <Modal
           animationType="fade"
-          visible={this.props.auth.loading}
+          visible={this.props.user.loading}
           onRequestClose={() => !this.props.auth.loading }
           >
           <View style={styles.container}>
@@ -282,14 +283,15 @@ class EditProfile extends Component {
 mapStateToProps = (state) => {
   return {
     auth: state.auth,
-    initialValues: state.user.user
+    initialValues: state.user.user,
+    user: state.user
   };
 }
 
 mapDispatchToProps = (dispatch) => {
   return {
-    onSave: (uid, name, email, password, number, birthdate, gender, value, address) => {
-      dispatch(editProfile(uid,name, email, password, number, birthdate, gender, value, address)
+    onSave: (uid, name, email, password, number, birthdate, gender, value, location, address) => {
+      dispatch(editProfile(uid,name, email, password, number, birthdate, gender, value, location, address)
     )},
   }
 }

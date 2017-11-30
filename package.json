@@ -28,6 +28,7 @@
 		"react-native-maps": "^0.17.1",
 		"react-native-message-bar": "^2.0.6",
 		"react-native-modalbox": "^1.4.2",
+		"react-native-snackbar": "^0.4.4",
 		"react-native-star-rating": "^1.0.8",
 		"react-native-statusbar-alert": "^0.4.0",
 		"react-native-vector-icons": "^4.4.2",
@@ -46,6 +47,9 @@
 		"react-test-renderer": "16.0.0-alpha.12"
 	},
 	"jest": {
-		"preset": "react-native"
-	}
+		"preset": "react-native",
+		"transformIgnorePatterns": [
+			"node_modules/(?!(jest-)?react-native|react-navigation)"
+		]
+	}	
 }

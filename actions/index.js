@@ -45,7 +45,15 @@ import {
 
   ADD_TO_WISHLIST_REQUEST,
   ADD_TO_WISHLIST_SUCCESS,
-  ADD_TO_WISHLIST_FAILURE
+  ADD_TO_WISHLIST_FAILURE,
+  
+  FETCH_USER_POST_REQUEST,
+  FETCH_USER_POST_SUCCESS,
+  FETCH_USER_POST_FAILURE,
+
+  REMOVE_WISHLIST_REQUEST,
+  REMOVE_WISHLIST_SUCCESS,
+  REMOVE_WISHLIST_FAILURE
 } from '../constants';
 
 export const signInUser = ({ email, password }) => {
@@ -53,7 +61,6 @@ return (dispatch) => {
   dispatch({ type: SIGN_IN_REQUEST });
   firebase.auth().signInWithEmailAndPassword(email, password)
   .then((user) => {
-    console.log(user)
     var count;
     firebase.database().ref(`user/${user.uid}`).once('value', (snap) => {
       count = snap.val().loggedIn + 1
@@ -155,7 +162,7 @@ export const signUpUser = ({
 // }
 
 export const fetchingUser = (uid) => {
-  return(dispatch) => {
+  return(dispatch, getState) => {
     dispatch({ type: FETCH_USER_REQUEST })
     firebase.database().ref(`user/${uid}`).on('value', (snap) => {
       dispatch({type: FETCH_USER_SUCCESS, payload: snap.val()})
@@ -174,10 +181,12 @@ export const editProfile = ({
   number, 
   birthdate, 
   gender, 
-  value, 
+  value,
+  location,
   address
 }) => {
   return(dispatch) => {
+    console.log(location)
     dispatch({ type: UPDATE_USER_REQUEST })
     firebase.database().ref(`user/${uid}`).update({
       name: name,
@@ -187,6 +196,7 @@ export const editProfile = ({
       birthdate: birthdate,
       gender: gender,
       value: value,
+      location,
       address: address
     })
     .then(() => {
@@ -278,13 +288,6 @@ export const uploadCoverPhoto = ({id, image}) => {
 
 export const addPost = ({
   uid,
-  name,
-  email,
-  gender,
-  birthdate,
-  cover_image,
-  profile_image,
-  value,
   origin,
   destination,
   departure_date,
@@ -297,13 +300,6 @@ export const addPost = ({
     dispatch({ type: CREATE_POST_REQUEST })
     firebase.database().ref('Post').push({
       author_id: uid,
-      name,
-      email,
-      gender,
-      birthdate,
-      cover_image,
-      profile_image,
-      value,
       origin: origin,
       destination: destination,
       departure_date: departure_date,
@@ -323,18 +319,12 @@ export const fetchPost = () => {
   return(dispatch) => {
     dispatch({ type: FETCH_POST_REQUEST })
     var items= [];
-    firebase.database().ref('Post').on('value', (snap) => {
+    var posts = [];
+    firebase.database().ref('Post').once('value').then((snap) => {
       snap.forEach((data) => {
         items.push({
           key:data.key,
           author_id: data.val().author_id,
-          name: data.val().name,
-          email: data.val().email,
-          gender: data.val().gender,
-          birthdate: data.val().birthdate,
-          cover_image: data.val().cover_image,
-          profile_image: data.val().profile_image,
-          value: data.val().value,
           origin: data.val().origin,
           destination: data.val().destination,
           description: data.val().description,
@@ -344,7 +334,13 @@ export const fetchPost = () => {
           max_weight: data.val().max_weight,
         })
       })
-      dispatch({ type: FETCH_POST_SUCCESS, payload: items })
+    }).then(() => {
+      items.forEach((item) =>{
+        firebase.database().ref(`user/${item.author_id}`).once('value').then((snap) => {
+          posts.push(Object.assign(item, snap.val()))
+          dispatch({ type: FETCH_POST_SUCCESS, payload: posts })
+        })
+      })
     })
   }
 }
@@ -353,19 +349,58 @@ export const connectionStatus = ({ status }) => {
   return { type: CHECK_CONNECTION_STATUS, isConnected: status }
 }
 
-export const addToWishlist = ({ key, uid}) => {
-  return(dispatch) => {
-    var data= [];
-    dispatch({ type: ADD_TO_WISHLIST_REQUEST })
-    firebase.database().ref(`user/${uid}`).update({
-      wishlist: [
-        ...key,
-        key
-      ]
+export const userPost = ({ uid }) => {
+  return (dispatch) => {
+    var items = [];
+    dispatch({ type: FETCH_USER_POST_REQUEST })
+    firebase.database().ref('Post').orderByChild('author_id').equalTo(uid).once('value').then((snap) => {
+      snap.forEach((data) => {
+        items.push(data.val())
+      })
     }).then(() => {
-      dispatch({ type: ADD_TO_WISHLIST_SUCCESS, payload:key })
+      dispatch({ type: FETCH_USER_POST_SUCCESS, payload: items })
     }).catch((e) => {
-      dispatch({ type: ADD_TO_WISHLIST_FAILURE, payload:e })
+      dispatch({ type: FETCH_USER_POST_FAILURE, payload: e })
+    })
+  }
+}
+
+export const addToWishlist = ({ uid, key }) => {
+  return(dispatch) => {
+    dispatch({ type: ADD_TO_WISHLIST_REQUEST })
+      firebase.database().ref(`user/${uid}`).transaction((currentData) => {
+      if (currentData.wishlist === null || currentData.wishlist === undefined ){
+      firebase.database().ref(`user/${uid}`).update({
+        wishlist: [key]
+      })
+      }
+      else {
+        firebase.database().ref(`user/${uid}/wishlist`).once('value').then((snap) => {
+          const wishlist = [
+            ...snap.val(),
+            key
+          ]
+          firebase.database().ref(`user/${uid}`).update({
+            wishlist
+          }).then(() => {
+            dispatch({ type: ADD_TO_WISHLIST_SUCCESS })
+          }).catch((e) => {
+            dispatch({ type: ADD_TO_WISHLIST_FAILURE, payload: e })
+          })
+        })
+      }
+    })
+  }
+}
+
+export const removeFromWishList = ({ uid, key }) => {
+  return(dispatch) => {
+    dispatch({ type: REMOVE_WISHLIST_REQUEST })
+    firebase.database().ref(`user/${uid}/wishlist`).once('value').then((snap) => {
+      let updates = {}
+      snap.forEach((arrays) => updates[key] = null);
+      console.log(updates)
+      firebase.database().ref(`user/${uid}/wishlist`).update(updates)
     })
   }
 }

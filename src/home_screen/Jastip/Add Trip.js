@@ -14,6 +14,7 @@ import {
 } from 'react-native';
 import { connect } from 'react-redux';
 import { FormLabel } from 'react-native-elements';
+import {GooglePlacesAutocomplete} from 'react-native-google-places-autocomplete';
 import { Field, reduxForm } from 'redux-form';
 import { addPost } from '../../../actions';
 import styles from '../../../components/style';
@@ -27,20 +28,19 @@ class AddTrip extends Component {
     headerTitleStyle: {alignSelf:'center'},
     headerRight: (<View></View>)
   }
+  constructor(){
+   super();
+   this.state = {
+     origin: '',
+     destination:''
+   } 
+  }
   onAdd(post){
     const { origin, destination, departure, arrival, description, max_items, max_weight } = post;
-    const { name , email, gender, birthdate, cover_image, profile_image, value } = this.props.user.user
       this.props.addPost({
         uid: this.props.auth.user.uid,
-        name: name,
-        email: email,
-        gender: gender,
-        birthdate: birthdate,
-        cover_image: cover_image,
-        profile_image: profile_image,
-        value: value,
-        origin: origin,
-        destination: destination,
+        origin: this.state.origin,
+        destination: this.state.destination,
         departure_date: departure,
         arrival_date: arrival,
         description: description,
@@ -58,23 +58,115 @@ class AddTrip extends Component {
         <ScrollView>
           <View style={[styles.centerContainer, {marginTop: 30}]}>
                 
-                <Field
-                  name="origin"
-                  component={customInput}
-                  placeholder="Origin"
-                  style={styles.widthForm}
+          <GooglePlacesAutocomplete
+                debounce={0}
+                listViewDisplayed='auto'
+                enablePoweredByContainer={false}
+                placeholder='Origin'
+                placeholderTextColor="#666666"
+                underlineColorAndroid="#666666"
+                maxLength={1}
+                returnKeyType={'search'}
+                autoFocus={false}
+                fetchDetails={true}
+                renderDescription={row => row.description}
+                styles={{
+                  textInputContainer: {
+                    backgroundColor: 'rgba(0,0,0,0)',
+                    borderTopWidth: 0,
+                    width:'92%'
+                  },
+                  textInput: {
+                    height: 38,
+                    backgroundColor:'transparent',
+                    width:'100%'
+                  },
+                  predefinedPlacesDescription: {
+                    color: '#222',
+                    types: 'address',
+                  },
+                  description:{
+                    color:'#222'
+                  },
+                  listView:{
+                    marginLeft: 40,
+                    height:50,
+                  }
+                }}
+                query={{
+                  key: 'AIzaSyB1QYooomCr1o_TKMukX6w4-aPx_nIw0J0',
+                  types: '(cities)'
+                }}
+                GooglePlacesSearchQuery={{
+                  types: '(cities)'
+                }}
+                onPress={(data, details = null) => {
+                  console.log(details)
+                  this.setState({
+                    origin: details.address_components[0].long_name,
+                  })
+              }}
+              />
+
+                <GooglePlacesAutocomplete
+                  debounce={0}
+                  listViewDisplayed='auto'
+                  enablePoweredByContainer={false}
+                  placeholder='Destination'
                   placeholderTextColor="#666666"
-                  underlineColorAndroid='#666666'
+                  underlineColorAndroid="#666666"
+                  maxLength={1}
+                  returnKeyType={'search'}
+                  autoFocus={false}
+                  fetchDetails={true}
+                  renderDescription={row => row.description}
+                  styles={{
+                    textInputContainer: {
+                      backgroundColor: 'rgba(0,0,0,0)',
+                      borderTopWidth: 0,
+                      width:'92%'
+                    },
+                    textInput: {
+                      height: 38,
+                      backgroundColor:'transparent',
+                      width:'100%'
+                    },
+                    predefinedPlacesDescription: {
+                      color: '#222',
+                      types: 'address',
+                    },
+                    description:{
+                      color:'#222'
+                    },
+                    listView:{
+                      marginLeft: 40,
+                      height:50,
+                    }
+                  }}
+                  query={{
+                    key: 'AIzaSyB1QYooomCr1o_TKMukX6w4-aPx_nIw0J0',
+                    types: '(cities)'
+                  }}
+                  GooglePlacesSearchQuery={{
+                    types: '(cities)'
+                  }}
+                  onPress={(data, details = null) => {
+                    console.log(details)
+                    console.log(data)
+                    this.setState({
+                      destination: details.address_components[0].long_name,
+                    })
+                }}
                 />
 
-                <Field
+                {/* <Field
                   name="destination"
                   component={customInput}
                   placeholder="Destination"
                   style={styles.widthForm}
                   placeholderTextColor="#666666"
                   underlineColorAndroid='#666666'
-                />
+                /> */}
 
                 <View style={styles.rowContainer}>
                   <Field
@@ -178,13 +270,6 @@ mapDispatchToProps = (dispatch) => {
   return {
     addPost: (
       uid,
-      name,
-      email,
-      gender,
-      birthdate,
-      cover_image,
-      profile_image,
-      value,
       origin,
       destination,
       departure_date,
@@ -195,13 +280,6 @@ mapDispatchToProps = (dispatch) => {
     ) => {
       dispatch(addPost(
         uid,
-        name,
-        email,
-        gender,
-        birthdate,
-        cover_image,
-        profile_image,
-        value,
         origin,
         destination,
         departure_date,
@@ -230,8 +308,8 @@ const validate = (value) => {
   if (!value.description){
     errors.description = "Description is required"
   }
-  if (!value.max_item){
-    errors.max_item = "Max Item is required"
+  if (!value.max_items){
+    errors.max_items = "Max Item is required"
   }
   if (!value.max_weight){
     errors.max_weight = "Max Weight is required"

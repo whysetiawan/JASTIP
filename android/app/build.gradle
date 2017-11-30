@@ -142,6 +142,7 @@ android {
 }
 
 dependencies {
+    compile project(':react-native-snackbar')
     compile project(':react-native-maps')
     compile project(':react-native-image-crop-picker')
     compile project(':react-native-fetch-blob')

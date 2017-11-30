@@ -2,7 +2,7 @@ import React, {Component} from 'react';
 import {TabNavigator, TabView, TabBarBottom} from 'react-navigation';
 import Icon from 'react-native-vector-icons/Ionicons';
 import Explore from '../../src/home_screen/Explore';
-import Saved from '../../src/home_screen/Saved';
+import Wishlist from '../../src/home_screen/Wishlist';
 import Profile from '../../src/home_screen/Profile';
 import Jastip from '../../src/home_screen/Jastip';
 import Message from '../../src/home_screen/Message';
@@ -11,10 +11,11 @@ export default Tabs = TabNavigator({
 	Explore: { screen: Explore,
 	navigationOptions: {
 		tabBarLabel: 'EXPLORE',
+		header: null,
 		tabBarIcon: ({ tintColor}) =>  <Icon name="ios-search-outline" size={35} />
 	},
 },
-	Saved: { screen: Saved,
+Wishlist: { screen: Wishlist,
 	navigationOptions: {
 		tabBarLabel: 'WISHLIST',
 		tabBarIcon: ({ tintColor }) =>  <Icon name="ios-heart-outline" size={35} color={tintColor} />
@@ -23,6 +24,7 @@ export default Tabs = TabNavigator({
 	Jastip: { screen: Jastip,
 	navigationOptions: {
 		tabBarLabel: 'JASTIP',
+		header: null,
 		tabBarIcon: ({ tintColor}) =>  <Icon name="md-list" size={35} color={tintColor} />
 	},
 },

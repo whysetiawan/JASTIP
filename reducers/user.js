@@ -15,9 +15,15 @@ import {
   UPLOAD_COVER_PHOTO_SUCCESS,
   UPLOAD_COVER_PHOTO_FAILURE,
 
+  FETCH_USER_POST_REQUEST,
+  FETCH_USER_POST_SUCCESS,
+  FETCH_USER_POST_FAILURE,
+
   ADD_TO_WISHLIST_REQUEST,
   ADD_TO_WISHLIST_SUCCESS,
-  ADD_TO_WISHLIST_FAILURE
+  ADD_TO_WISHLIST_FAILURE,
+  FETCH_POST_REQUEST,
+  FETCH_POST_SUCCESS
 } from '../constants';
 
 const initState = {
@@ -99,6 +105,27 @@ export default userReducer = (state= initState, action) => {
       }
     }
     case UPLOAD_COVER_PHOTO_FAILURE:
+    return {
+      ...state,
+      loading: false,
+      error: true,
+      errorMsg: action.payload
+    }
+    case FETCH_USER_POST_REQUEST:
+    return {
+      ...state,
+      loading:true
+    }
+    case FETCH_USER_POST_SUCCESS:
+    return {
+      ...state,
+      loading: false,
+      user: {
+        ...state.user,
+        post: action.payload
+      }
+    }
+    case FETCH_USER_POST_FAILURE:
     return {
       ...state,
       loading: false,

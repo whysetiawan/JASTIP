@@ -193,7 +193,12 @@ const styles = StyleSheet.create({
 		borderWidth: 1,
 		borderColor: '#222',
 		margin: 10
-}
+	},
+	userLocation: {
+		width: 390,
+		height: 200,
+		marginTop: 10
+	}
 })
 
 export default styles;

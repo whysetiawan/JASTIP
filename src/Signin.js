@@ -54,7 +54,7 @@ class Signin extends Component {
   }
 
   initAnimation(){
-    if (!this.animation){
+    if (!this.animation || this.animation.play() !== null){
       setTimeout(() => {
         this.initAnimation();
       }, 100);
@@ -136,17 +136,17 @@ class Signin extends Component {
           >
           <View style={styles.container}>
             <View style={styles.centerContainer}>
-            <Animation
-                    ref={animation => {
-                      this.animation = animation;
-                    }}
-                    style={{
-                      width: 200,
-                      height: 100
-                    }}
-                    loop={true}
-                    source={require('../components/animations/loading_animation.json')}
-                />
+              <Animation
+                ref={animation => {
+                  this.animation = animation;
+                }}
+                style={{
+                  width: 200,
+                  height: 100
+                }}
+                loop={true}
+                source={require('../components/animations/loading_animation.json')}
+              />
             </View>
           </View>
           </Modal>
